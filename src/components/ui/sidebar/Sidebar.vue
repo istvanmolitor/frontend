@@ -2,7 +2,7 @@
 import { cn } from '@/lib/utils'
 import { useSidebar } from './utils'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
-import { type HTMLAttributes } from 'vue'
+import { type HTMLAttributes, computed } from 'vue'
 
 const props = withDefaults(defineProps<{
   side?: 'left' | 'right'
@@ -11,11 +11,12 @@ const props = withDefaults(defineProps<{
   class?: HTMLAttributes['class']
 }>(), {
   side: 'left',
-  variant: 'sidebar',
   collapsible: 'offcanvas',
 })
 
-const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+const { isMobile, state, openMobile, setOpenMobile, variant: sidebarVariant } = useSidebar()
+
+const variant = computed(() => props.variant || sidebarVariant)
 </script>
 
 <template>
@@ -33,7 +34,7 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
       :side="side"
       class="w-[--sidebar-width] bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
       :style="{
-        '--sidebar-width': '18rem',
+        '--sidebar-width': '300px',
       }"
     >
       <div class="flex h-full w-full flex-col">
@@ -44,7 +45,7 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
 
   <div
     v-else
-    class="group peer hidden md:block"
+    class="group/sidebar peer hidden md:block"
     :data-state="state"
     :data-collapsible="state === 'collapsed' ? collapsible : ''"
     :data-variant="variant"
@@ -69,7 +70,7 @@ const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
         // Adjust the padding for floating and inset variants.
         variant === 'floating' || variant === 'inset'
           ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]'
-          : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r group-data-[side=right]:border-l bg-background',
+          : 'group-data-[collapsible=icon]:w-[--sidebar-width-icon] group-data-[side=left]:border-r group-data-[side=right]:border-l bg-sidebar shadow-lg',
         props.class,
       )"
     >

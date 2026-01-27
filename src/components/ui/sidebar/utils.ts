@@ -8,6 +8,7 @@ export interface SidebarContext {
   setOpenMobile: (value: boolean) => void
   isMobile: ComputedRef<boolean>
   toggleSidebar: () => void
+  variant: 'sidebar' | 'floating' | 'inset'
 }
 
 export function useSidebar() {
