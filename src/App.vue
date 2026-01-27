@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import ShadcnDemo from './components/ShadcnDemo.vue'
+import Dashboard from './admin/views/Dashboard.vue'
 </script>
 
 <template>
-  <main>
-    <ShadcnDemo />
-  </main>
+  <Dashboard />
 </template>
 
 <style>
