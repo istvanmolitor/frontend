@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { cn } from '@/lib/utils'
 import { useSidebar } from './utils'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
+import { Sheet, SheetContent } from '@admin/ui/sheet'
 import { type HTMLAttributes, computed } from 'vue'
 
 const props = withDefaults(defineProps<{

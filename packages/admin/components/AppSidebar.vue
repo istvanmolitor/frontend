@@ -10,7 +10,7 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarGroupContent,
-} from '@/components/ui/sidebar'
+} from '@admin/ui/sidebar'
 import {
   LayoutDashboard,
   Settings,

@@ -7,13 +7,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from '@admin/ui/dropdown-menu'
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from '@/components/ui/sidebar'
+} from '@admin/ui/sidebar'
 import { ChevronsUpDown, Plus } from 'lucide-vue-next'
 import { ref } from 'vue'
 

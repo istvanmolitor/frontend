@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { cn } from '@/lib/utils'
 import { useEventListener, useMediaQuery, useVModel } from '@vueuse/core'
-import { TooltipProvider } from '@/components/ui/tooltip'
+import { TooltipProvider } from '@admin/ui/tooltip'
 import { type HTMLAttributes, computed, provide, ref, type Ref } from 'vue'
 import { type SidebarContext } from './utils'
 
