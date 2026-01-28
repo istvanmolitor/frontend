@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import { Button } from '@admin/ui/button'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@admin/ui/card'
+import Button from '@admin/components/ui/Button.vue'
+import Card from '@admin/components/ui/Card.vue'
+import CardContent from '@admin/components/ui/CardContent.vue'
+import CardDescription from '@admin/components/ui/CardDescription.vue'
+import CardFooter from '@admin/components/ui/CardFooter.vue'
+import CardHeader from '@admin/components/ui/CardHeader.vue'
+import CardTitle from '@admin/components/ui/CardTitle.vue'
 import { Mail } from 'lucide-vue-next'
 </script>
 

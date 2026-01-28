@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import AdminLayout from '@admin/layouts/AdminLayout.vue'
-import { Button } from '@admin/ui/button'
+import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
+import Button from '@admin/components/ui/Button.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { userService, type User } from '../services/userService'

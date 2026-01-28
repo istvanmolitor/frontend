@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AdminLayout from '@admin/layouts/AdminLayout.vue'
+import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
 </script>
 
 <template>
