@@ -291,3 +291,111 @@ import Profile from '@user/views/Profile.vue'
 ### CORS error
 - Backend `config/cors.php` beállítások
 - `supports_credentials: true` kell
+
+## User Groups és Permissions
+
+### Funkciók
+
+A csomag teljes körű CRUD funkcionalitást biztosít felhasználói csoportok és jogosultságok kezelésére.
+
+#### User Groups (Felhasználói Csoportok)
+- ✅ Lista nézet oldalszámozással
+- ✅ Új csoport létrehozása
+- ✅ Csoport szerkesztése
+- ✅ Csoport törlése
+- ✅ Jogosultságok hozzárendelése
+- ✅ Alapértelmezett csoport beállítása
+
+#### Permissions (Jogosultságok)
+- ✅ Lista nézet oldalszámozással
+- ✅ Új jogosultság létrehozása
+- ✅ Jogosultság szerkesztése
+- ✅ Jogosultság törlése
+- ✅ Kapcsolódó csoportok megjelenítése
+
+### Routes
+
+#### User Groups
+- `/user-groups` - Felhasználói csoportok listája
+- `/user-groups/create` - Új csoport létrehozása
+- `/user-groups/:id/edit` - Csoport szerkesztése
+
+#### Permissions
+- `/permissions` - Jogosultságok listája
+- `/permissions/create` - Új jogosultság létrehozása
+- `/permissions/:id/edit` - Jogosultság szerkesztése
+
+### Services
+
+#### userGroupService.ts
+```typescript
+// Lista lekérése
+const response = await userGroupService.getAll({ page: 1, search: 'admin' })
+
+// Létrehozás
+await userGroupService.create({
+  name: 'Administrators',
+  description: 'System administrators',
+  is_default: false,
+  permissions: [1, 2, 3]
+})
+
+// Szerkesztés
+await userGroupService.update(1, {
+  name: 'Super Administrators',
+  permissions: [1, 2, 3, 4]
+})
+
+// Törlés
+await userGroupService.delete(1)
+```
+
+#### permissionService.ts
+```typescript
+// Lista lekérése
+const response = await permissionService.getAll({ page: 1 })
+
+// Létrehozás
+await permissionService.create({
+  name: 'users.create',
+  description: 'Create new users'
+})
+
+// Szerkesztés
+await permissionService.update(1, {
+  name: 'users.edit',
+  description: 'Edit existing users'
+})
+
+// Törlés
+await permissionService.delete(1)
+```
+
+### API Endpoints
+
+#### User Groups
+- `GET /api/admin/user/user-groups` - Lista (paginated)
+- `GET /api/admin/user/user-groups/create` - Elérhető jogosultságok
+- `POST /api/admin/user/user-groups` - Létrehozás
+- `GET /api/admin/user/user-groups/:id/edit` - Szerkesztési adatok
+- `PUT /api/admin/user/user-groups/:id` - Frissítés
+- `DELETE /api/admin/user/user-groups/:id` - Törlés
+
+#### Permissions
+- `GET /api/admin/user/permissions` - Lista (paginated)
+- `POST /api/admin/user/permissions` - Létrehozás
+- `GET /api/admin/user/permissions/:id/edit` - Szerkesztési adatok
+- `PUT /api/admin/user/permissions/:id` - Frissítés
+- `DELETE /api/admin/user/permissions/:id` - Törlés
+
+### Komponensek
+
+A csomagban használt admin UI komponensek:
+- `Button` - Gombok (különböző variánsok)
+- `Input` - Szövegmezők
+- `Textarea` - Többsoros szövegmezők
+- `Checkbox` - Jelölőnégyzetek
+- `Card` - Kártya konténerek
+- `AdminLayout` - Admin oldal layout
+
+Részletes tesztelési útmutató: `/TESTING_GUIDE.md`

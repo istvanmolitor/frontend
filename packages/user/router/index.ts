@@ -48,6 +48,44 @@ const userRoutes: RouteRecordRaw[] = [
     name: 'user-edit',
     component: () => import('../views/user/UserEdit.vue'),
     meta: { requiresAuth: true }
+  },
+  // User Groups
+  {
+    path: '/user-groups',
+    name: 'user-groups',
+    component: () => import('../views/user-group/UserGroupIndex.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/user-groups/create',
+    name: 'user-group-create',
+    component: () => import('../views/user-group/UserGroupCreate.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/user-groups/:id/edit',
+    name: 'user-group-edit',
+    component: () => import('../views/user-group/UserGroupEdit.vue'),
+    meta: { requiresAuth: true }
+  },
+  // Permissions
+  {
+    path: '/permissions',
+    name: 'permissions',
+    component: () => import('../views/permission/PermissionIndex.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/permissions/create',
+    name: 'permission-create',
+    component: () => import('../views/permission/PermissionCreate.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/permissions/:id/edit',
+    name: 'permission-edit',
+    component: () => import('../views/permission/PermissionEdit.vue'),
+    meta: { requiresAuth: true }
   }
 ]
 
