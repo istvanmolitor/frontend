@@ -2,11 +2,14 @@ import axios from 'axios'
 import config from '@/config'
 
 const api = axios.create({
-  baseURL: config.SERVER_URL,
+  // Use relative URLs to leverage Vite proxy in development
+  // baseURL is empty so requests go through Vite dev server proxy
+  baseURL: '',
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
+  withCredentials: true, // Important for CORS with Sanctum
 })
 
 // Add token to requests
@@ -91,7 +94,7 @@ export const authService = {
    */
   async login(credentials: LoginCredentials): Promise<LoginResponse> {
     try {
-      const response = await api.post<LoginResponse>('/admin/auth/login', {
+      const response = await api.post<LoginResponse>('/api/auth/login', {
         ...credentials,
         device_name: credentials.device_name || 'web_browser'
       })
@@ -150,7 +153,7 @@ export const authService = {
    */
   async resetPassword(token: string, email: string, password: string, password_confirmation: string): Promise<{ message: string }> {
     try {
-      const response = await api.post<{ message: string }>('/admin/auth/reset-password', {
+      const response = await api.post<{ message: string }>('/api/auth/reset-password', {
         token,
         email,
         password,
