@@ -8,14 +8,12 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
-import { useRouter, useRoute } from 'vue-router'
-import { reactive, ref, onMounted } from 'vue'
-import { userService } from '../services/userService'
+import { useRouter } from 'vue-router'
+import { reactive, ref } from 'vue'
+import { userService } from '../../services/userService.ts'
 
 const router = useRouter()
-const route = useRoute()
 const isSaving = ref(false)
-const isLoading = ref(true)
 
 const form = reactive({
   name: '',
@@ -23,30 +21,13 @@ const form = reactive({
   role: 'User'
 })
 
-const fetchUser = async () => {
-  const id = route.params.id as string
-  try {
-    isLoading.value = true
-    const response = await userService.getById(id)
-    form.name = response.data.name
-    form.email = response.data.email
-    form.role = response.data.role
-  } catch (error) {
-    console.error('Hiba a felhasználó betöltésekor:', error)
-    router.push('/users')
-  } finally {
-    isLoading.value = false
-  }
-}
-
 const handleSubmit = async () => {
-  const id = route.params.id as string
   try {
     isSaving.value = true
-    await userService.update(id, form)
+    await userService.create(form)
     router.push('/users')
   } catch (error) {
-    console.error('Hiba a felhasználó frissítésekor:', error)
+    console.error('Hiba a felhasználó létrehozásakor:', error)
   } finally {
     isSaving.value = false
   }
@@ -55,27 +36,19 @@ const handleSubmit = async () => {
 const goBack = () => {
   router.push('/users')
 }
-
-onMounted(() => {
-  fetchUser()
-})
 </script>
 
 <template>
   <AdminLayout>
     <div class="flex items-center justify-between space-y-2 mb-4">
-      <h2 class="text-3xl font-bold tracking-tight">Felhasználó szerkesztése</h2>
+      <h2 class="text-3xl font-bold tracking-tight">Új felhasználó</h2>
       <Button variant="outline" @click="goBack">Vissza</Button>
     </div>
 
-    <div v-if="isLoading" class="flex justify-center py-8">
-      Betöltés...
-    </div>
-
-    <Card v-else class="max-w-2xl mx-auto">
+    <Card class="max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Felhasználói adatok</CardTitle>
-        <CardDescription>Módosítsd a felhasználó adatait.</CardDescription>
+        <CardDescription>Add meg az új felhasználó adatait a létrehozáshoz.</CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
         <div class="space-y-2">

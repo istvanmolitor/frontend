@@ -3,7 +3,7 @@ import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
 import Button from '@admin/components/ui/Button.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
-import { userService, type User } from '../services/userService'
+import { userService, type User } from '../../services/userService.ts'
 
 const router = useRouter()
 const users = ref<User[]>([])
@@ -66,7 +66,8 @@ onMounted(() => {
             </div>
           </div>
           <div class="flex items-center gap-4">
-            <span class="text-sm px-2 py-1 bg-secondary rounded">{{ user.role }}</span>
+            <span v-if="user.email_verified" class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded">Verified</span>
+            <span v-else class="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 rounded">Not Verified</span>
             <div class="flex gap-2">
               <Button variant="ghost" size="sm" @click="editUser(user.id!)">Szerkesztés</Button>
               <Button variant="destructive" size="sm" @click="deleteUser(user.id!)">Törlés</Button>
