@@ -10,7 +10,7 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
-import { userService } from '../../services/userService.ts'
+import { userService, type User } from '../../services/userService.ts'
 
 const router = useRouter()
 const route = useRoute()
@@ -26,9 +26,10 @@ const fetchUser = async () => {
   const id = route.params.id as string
   try {
     isLoading.value = true
-    const response = await userService.getById(id)
-    form.name = response.data.name
-    form.email = response.data.email
+    const { data } = await userService.getById(id)
+    const user = data.data
+    form.name = user.name
+    form.email = user.email
   } catch (error) {
     console.error('Hiba a felhasználó betöltésekor:', error)
     router.push('/users')

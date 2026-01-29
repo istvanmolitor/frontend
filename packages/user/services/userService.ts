@@ -48,12 +48,16 @@ export interface PaginatedResponse<T> {
   }
 }
 
+export interface SingleResponse<T> {
+  data: T
+}
+
 export const userService = {
   getAll(params?: { search?: string; sort?: string; direction?: string; page?: number }) {
     return api.get<PaginatedResponse<User>>('/api/admin/user/users', { params })
   },
   getById(id: number | string) {
-    return api.get<User>(`/api/admin/user/users/${id}`)
+    return api.get<SingleResponse<User>>(`/api/admin/user/users/${id}`)
   },
   create(user: User) {
     return api.post<User>('/api/admin/user/users', user)

@@ -61,12 +61,16 @@ export interface PaginatedResponse<T> {
   }
 }
 
+export interface SingleResponse<T> {
+  data: T
+}
+
 export const permissionService = {
   getAll(params?: { search?: string; sort?: string; direction?: string; page?: number }) {
     return api.get<PaginatedResponse<Permission>>('/api/admin/user/permissions', { params })
   },
   getById(id: number | string) {
-    return api.get<{ data: Permission }>(`/api/admin/user/permissions/${id}/edit`)
+    return api.get<SingleResponse<Permission>>(`/api/admin/user/permissions/${id}`)
   },
   create(permission: PermissionFormData) {
     return api.post<{ data: Permission; message: string }>('/api/admin/user/permissions', permission)

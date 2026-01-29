@@ -63,12 +63,17 @@ export interface PaginatedResponse<T> {
   }
 }
 
+export interface SingleResponse<T> {
+  data: T
+  permissions?: Permission[]
+}
+
 export const userGroupService = {
   getAll(params?: { search?: string; sort?: string; direction?: string; page?: number }) {
     return api.get<PaginatedResponse<UserGroup>>('/api/admin/user/user-groups', { params })
   },
   getById(id: number | string) {
-    return api.get<{ data: UserGroup; permissions: Permission[] }>(`/api/admin/user/user-groups/${id}/edit`)
+    return api.get<SingleResponse<UserGroup>>(`/api/admin/user/user-groups/${id}`)
   },
   getCreateData() {
     return api.get<{ permissions: Permission[] }>('/api/admin/user/user-groups/create')
