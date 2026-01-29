@@ -60,7 +60,7 @@ const goBack = () => {
         </div>
         <div class="space-y-2">
           <label for="description" class="text-sm font-medium">Leírás</label>
-          <Textarea id="description" v-model="form.description" placeholder="Opcionális leírás..." rows="3" />
+          <Textarea id="description" v-model="form.description" placeholder="Opcionális leírás..." :rows="3" />
         </div>
       </CardContent>
       <CardFooter class="flex justify-end gap-2">

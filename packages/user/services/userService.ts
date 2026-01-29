@@ -33,9 +33,24 @@ export interface User {
   updated_at?: string
 }
 
+export interface PaginatedResponse<T> {
+  data: T[]
+  meta: {
+    current_page: number
+    last_page: number
+    per_page: number
+    total: number
+  }
+  filters?: {
+    search?: string
+    sort?: string
+    direction?: string
+  }
+}
+
 export const userService = {
-  getAll() {
-    return api.get<User[]>('/api/admin/user/users')
+  getAll(params?: { search?: string; sort?: string; direction?: string; page?: number }) {
+    return api.get<PaginatedResponse<User>>('/api/admin/user/users', { params })
   },
   getById(id: number | string) {
     return api.get<User>(`/api/admin/user/users/${id}`)

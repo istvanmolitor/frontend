@@ -1,25 +1,38 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
 import Button from '@admin/components/ui/Button.vue'
+import DataTable, { type Column, type PaginationMeta } from '@admin/components/DataTable.vue'
 import { useRouter } from 'vue-router'
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { userGroupService, type UserGroup } from '../../services/userGroupService.ts'
 
 const router = useRouter()
 const userGroups = ref<UserGroup[]>([])
-const isLoading = ref(true)
-const currentPage = ref(1)
-const totalPages = ref(1)
-const total = ref(0)
+const isLoading = ref(false)
+const pagination = ref<PaginationMeta>({
+  current_page: 1,
+  last_page: 1,
+  per_page: 10,
+  total: 0
+})
 
-const fetchUserGroups = async (page = 1) => {
+const columns: Column<UserGroup>[] = [
+  { key: 'id', label: 'ID', sortable: true, width: '80px' },
+  { key: 'name', label: 'Név', sortable: true },
+  { key: 'description', label: 'Leírás', sortable: false },
+]
+
+const fetchUserGroups = async (params: {
+  search?: string
+  sort?: string
+  direction?: 'asc' | 'desc'
+  page?: number
+}) => {
   try {
     isLoading.value = true
-    const response = await userGroupService.getAll({ page })
+    const response = await userGroupService.getAll(params)
     userGroups.value = response.data.data
-    currentPage.value = response.data.meta.current_page
-    totalPages.value = response.data.meta.last_page
-    total.value = response.data.meta.total
+    pagination.value = response.data.meta
   } catch (error) {
     console.error('Hiba a felhasználói csoportok betöltésekor:', error)
   } finally {
@@ -32,7 +45,7 @@ const deleteUserGroup = async (id: number) => {
 
   try {
     await userGroupService.delete(id)
-    await fetchUserGroups(currentPage.value)
+    await fetchUserGroups({ page: pagination.value.current_page })
   } catch (error) {
     console.error('Hiba a felhasználói csoport törlésekor:', error)
   }
@@ -41,75 +54,57 @@ const deleteUserGroup = async (id: number) => {
 const editUserGroup = (id: number) => {
   router.push(`/user-groups/${id}/edit`)
 }
-
-const goToPage = (page: number) => {
-  fetchUserGroups(page)
-}
-
-onMounted(() => {
-  fetchUserGroups()
-})
 </script>
 
 <template>
   <AdminLayout>
-    <div class="flex items-center justify-between space-y-2">
+    <div class="flex items-center justify-between mb-6">
       <h2 class="text-3xl font-bold tracking-tight">Felhasználói csoportok</h2>
-      <div class="flex items-center space-x-2">
-        <Button @click="router.push('/user-groups/create')">Új csoport</Button>
-      </div>
     </div>
-    <div class="mt-4 border rounded-md p-4">
-      <div v-if="isLoading" class="flex justify-center py-8">
-        Betöltés...
-      </div>
-      <div v-else-if="userGroups.length === 0" class="flex justify-center py-8 text-muted-foreground">
-        Nincs megjeleníthető felhasználói csoport.
-      </div>
-      <div v-else class="space-y-4">
-        <div v-for="group in userGroups" :key="group.id" class="flex items-center justify-between p-2 border-b last:border-0">
-          <div class="flex gap-4 items-center">
-            <span class="text-xs font-mono text-muted-foreground w-8">#{{ group.id }}</span>
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="font-medium">{{ group.name }}</span>
-                <span v-if="group.is_default" class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">Alapértelmezett</span>
-              </div>
-              <div v-if="group.description" class="text-sm text-muted-foreground">{{ group.description }}</div>
-              <div v-if="group.permissions && group.permissions.length > 0" class="text-xs text-muted-foreground mt-1">
-                Jogosultságok: {{ group.permissions.length }} db
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center gap-2">
-            <Button variant="ghost" size="sm" @click="editUserGroup(group.id!)">Szerkesztés</Button>
-            <Button variant="destructive" size="sm" @click="deleteUserGroup(group.id!)">Törlés</Button>
-          </div>
-        </div>
 
-        <!-- Pagination -->
-        <div v-if="totalPages > 1" class="flex items-center justify-center gap-2 mt-4 pt-4 border-t">
-          <Button
-            variant="outline"
-            size="sm"
-            :disabled="currentPage === 1"
-            @click="goToPage(currentPage - 1)"
-          >
-            Előző
-          </Button>
-          <span class="text-sm text-muted-foreground">
-            {{ currentPage }} / {{ totalPages }} ({{ total }} elem)
+    <DataTable
+      :columns="columns"
+      :data="userGroups"
+      :loading="isLoading"
+      :pagination="pagination"
+      :searchable="true"
+      search-placeholder="Keresés név vagy leírás alapján..."
+      default-sort="name"
+      default-direction="asc"
+      @fetch="fetchUserGroups"
+    >
+      <template #actions>
+        <Button @click="router.push('/user-groups/create')">Új csoport</Button>
+      </template>
+
+      <template #cell-name="{ row }">
+        <div class="flex items-center gap-2">
+          <span class="font-medium">{{ row.name }}</span>
+          <span v-if="row.is_default" class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">
+            Alapértelmezett
           </span>
-          <Button
-            variant="outline"
-            size="sm"
-            :disabled="currentPage === totalPages"
-            @click="goToPage(currentPage + 1)"
-          >
-            Következő
-          </Button>
         </div>
-      </div>
-    </div>
+      </template>
+
+      <template #cell-description="{ row }">
+        <div>
+          <div v-if="row.description" class="text-sm">{{ row.description }}</div>
+          <div v-if="row.permissions && row.permissions.length > 0" class="text-xs text-muted-foreground mt-1">
+            Jogosultságok: {{ row.permissions.length }} db
+          </div>
+        </div>
+      </template>
+
+      <template #row-actions="{ row }">
+        <div class="flex items-center justify-end gap-2">
+          <Button variant="ghost" size="sm" @click="editUserGroup(row.id!)">Szerkesztés</Button>
+          <Button variant="destructive" size="sm" @click="deleteUserGroup(row.id!)">Törlés</Button>
+        </div>
+      </template>
+
+      <template #empty>
+        Nincs megjeleníthető felhasználói csoport.
+      </template>
+    </DataTable>
   </AdminLayout>
 </template>

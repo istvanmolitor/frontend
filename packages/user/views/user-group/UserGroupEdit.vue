@@ -111,7 +111,7 @@ onMounted(() => {
         </div>
         <div class="space-y-2">
           <label for="description" class="text-sm font-medium">Leírás</label>
-          <Textarea id="description" v-model="form.description" placeholder="Opcionális leírás..." rows="3" />
+          <Textarea id="description" v-model="form.description" placeholder="Opcionális leírás..." :rows="3" />
         </div>
         <div class="flex items-center space-x-2">
           <Checkbox id="is_default" :checked="form.is_default" @update:checked="form.is_default = $event" />
