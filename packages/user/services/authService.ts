@@ -34,6 +34,7 @@ api.interceptors.response.use(
       // Clear token on unauthorized
       localStorage.removeItem('auth_token')
       localStorage.removeItem('auth_user')
+      localStorage.removeItem('auth_permissions')
       // Redirect to login
       window.location.href = '/login'
     }
@@ -59,6 +60,7 @@ export interface User {
   created_at: string
   updated_at: string
   user_groups?: UserGroup[]
+  permissions?: string[]
 }
 
 export interface LoginCredentials {
@@ -127,6 +129,11 @@ export const authService = {
       localStorage.setItem('auth_token', token)
       localStorage.setItem('auth_user', JSON.stringify(user))
 
+      // Store permissions separately for easy access
+      if (user.permissions) {
+        localStorage.setItem('auth_permissions', JSON.stringify(user.permissions))
+      }
+
       return response.data
     } catch (error: any) {
       throw error.response?.data || { message: 'Registration failed' }
@@ -191,7 +198,20 @@ export const authService = {
     // Update stored user
     localStorage.setItem('auth_user', JSON.stringify(user))
 
+    // Store permissions separately for easy access
+    if (user.permissions) {
+      localStorage.setItem('auth_permissions', JSON.stringify(user.permissions))
+    }
+
     return user
+  },
+
+  /**
+   * Refresh current user data and permissions from server
+   * Useful when permissions might have changed or need to sync with backend
+   */
+  async refreshUser(): Promise<User> {
+    return this.me()
   },
 
   /**
@@ -220,6 +240,44 @@ export const authService = {
    */
   getToken(): string | null {
     return localStorage.getItem('auth_token')
+  },
+
+  /**
+   * Get stored permissions
+   */
+  getPermissions(): string[] {
+    const permissionsStr = localStorage.getItem('auth_permissions')
+    if (!permissionsStr) return []
+
+    try {
+      return JSON.parse(permissionsStr)
+    } catch {
+      return []
+    }
+  },
+
+  /**
+   * Check if user has a specific permission
+   */
+  hasPermission(permission: string): boolean {
+    const permissions = this.getPermissions()
+    return permissions.includes(permission)
+  },
+
+  /**
+   * Check if user has all of the specified permissions
+   */
+  hasAllPermissions(permissions: string[]): boolean {
+    const userPermissions = this.getPermissions()
+    return permissions.every(permission => userPermissions.includes(permission))
+  },
+
+  /**
+   * Check if user has any of the specified permissions
+   */
+  hasAnyPermission(permissions: string[]): boolean {
+    const userPermissions = this.getPermissions()
+    return permissions.some(permission => userPermissions.includes(permission))
   },
 }
 
