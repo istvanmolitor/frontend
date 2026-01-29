@@ -14,3 +14,7 @@ export { permissionService } from './services/permissionService'
 export type { User, LoginCredentials, RegisterCredentials, LoginResponse, AuthError } from './services/authService'
 export type { UserGroup } from './services/userGroupService'
 export type { Permission } from './services/permissionService'
+
+// Menu configuration
+export { userMenuConfig, default as defaultUserMenuConfig } from './config/menu'
+

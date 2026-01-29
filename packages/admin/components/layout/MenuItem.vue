@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import type { Component } from 'vue'
 import {
   Home,
   LayoutDashboard,
@@ -7,32 +8,25 @@ import {
   Users,
   Settings,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Circle
 } from 'lucide-vue-next'
-
-interface MenuItem {
-  id?: number
-  title: string
-  path?: string
-  icon?: string
-  children?: MenuItem[]
-  items?: MenuItem[]
-}
+import type { MenuItemConfig } from '@admin/types/menu'
 
 interface Props {
-  item: MenuItem
+  item: MenuItemConfig
   level: number
   isCollapsed: boolean
-  expandedItems: Set<number>
+  expandedItems: Set<string>
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits<{
-  toggle: [id: number]
+  toggle: [id: string]
 }>()
 
 const subItems = computed(() => {
-  return props.item.items || props.item.children || []
+  return props.item.children || []
 })
 
 const hasSubItems = computed(() => {
@@ -40,24 +34,21 @@ const hasSubItems = computed(() => {
 })
 
 const isExpanded = computed(() => {
-  return props.item.id ? props.expandedItems.has(props.item.id) : false
+  return props.expandedItems.has(props.item.id)
 })
 
-const getIconComponent = (iconName?: string) => {
-  const icons: Record<string, any> = {
-    'Home': Home,
-    'LayoutDashboard': LayoutDashboard,
-    'BarChart3': BarChart3,
-    'Users': Users,
-    'Settings': Settings,
+const iconComponent = computed((): Component => {
+  // If icon is already a Component, use it directly
+  if (props.item.icon) {
+    return props.item.icon as Component
   }
-  return iconName && icons[iconName] ? icons[iconName] : LayoutDashboard
-}
+
+  // Default icon based on level
+  return props.level === 0 ? LayoutDashboard : Circle
+})
 
 const handleToggle = () => {
-  if (props.item.id) {
-    emit('toggle', props.item.id)
-  }
+  emit('toggle', props.item.id)
 }
 
 const iconSize = computed(() => {
@@ -87,7 +78,7 @@ const marginClass = computed(() => {
         ]"
       >
         <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-10 transition-opacity"></div>
-        <component :is="getIconComponent(item.icon)" :size="iconSize" class="flex-shrink-0 relative z-10 group-hover:scale-110 transition-transform" />
+        <component :is="iconComponent" :size="iconSize" class="flex-shrink-0 relative z-10 group-hover:scale-110 transition-transform" />
         <span v-if="!isCollapsed" class="font-medium relative z-10 flex-1 text-left">{{ item.title }}</span>
         <component
           v-if="!isCollapsed"
@@ -104,7 +95,7 @@ const marginClass = computed(() => {
       >
         <MenuItem
           v-for="subItem in subItems"
-          :key="subItem.id || subItem.title"
+          :key="subItem.id"
           :item="subItem"
           :level="level + 1"
           :is-collapsed="isCollapsed"
@@ -125,7 +116,7 @@ const marginClass = computed(() => {
       ]"
     >
       <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-10 transition-opacity"></div>
-      <component :is="getIconComponent(item.icon)" :size="iconSize" class="flex-shrink-0 relative z-10 group-hover:scale-110 transition-transform" />
+      <component :is="iconComponent" :size="iconSize" class="flex-shrink-0 relative z-10 group-hover:scale-110 transition-transform" />
       <span v-if="!isCollapsed" class="font-medium relative z-10">{{ item.title }}</span>
     </a>
   </li>

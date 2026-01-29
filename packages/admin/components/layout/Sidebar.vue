@@ -1,39 +1,22 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import {
-  Home,
-  LayoutDashboard,
-  BarChart3,
-  Users,
-  Settings,
   ChevronLeft,
-  ChevronRight,
-  ChevronDown,
-  ChevronUp
+  ChevronRight
 } from 'lucide-vue-next'
-import config from '@/config'
 import MenuItem from './MenuItem.vue'
-
-interface MenuItem {
-  id?: number
-  title: string
-  path?: string
-  icon?: string
-  children?: MenuItem[]
-  items?: MenuItem[] // Support both 'children' and 'items' for flexibility
-}
+import { initializeMenu, getMenuItems } from '@admin/config/menuInitializer'
+import type { MenuItemConfig } from '@admin/types/menu'
 
 const isCollapsed = ref(false)
-const menuItems = ref<MenuItem[]>([])
-const expandedItems = ref<Set<number>>(new Set())
-const loading = ref(true)
-const error = ref<string | null>(null)
+const menuItems = ref<MenuItemConfig[]>([])
+const expandedItems = ref<Set<string>>(new Set())
 
 const toggleSidebar = () => {
   isCollapsed.value = !isCollapsed.value
 }
 
-const toggleSubmenu = (itemId: number) => {
+const toggleSubmenu = (itemId: string) => {
   if (expandedItems.value.has(itemId)) {
     expandedItems.value.delete(itemId)
   } else {
@@ -41,33 +24,16 @@ const toggleSubmenu = (itemId: number) => {
   }
 }
 
-const fetchMenuItems = async () => {
-  try {
-    loading.value = true
-    error.value = null
-    const response = await fetch(`${config.SERVER_URL}/api/menu/admin`)
+const loadMenuItems = () => {
+  // Initialize menu system (registers all package menus)
+  initializeMenu()
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
-    }
-
-    const data = await response.json()
-    menuItems.value = data
-  } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Failed to load menu'
-    console.error('Error fetching menu items:', err)
-    // Fallback menu ha hiba történik
-    menuItems.value = [
-      { id: 1, icon: 'Home', title: 'Kezdőlap', path: '/' },
-      { id: 2, icon: 'LayoutDashboard', title: 'Dashboard', path: '/dashboard' },
-    ]
-  } finally {
-    loading.value = false
-  }
+  // Get menu items from registry
+  menuItems.value = getMenuItems()
 }
 
 onMounted(() => {
-  fetchMenuItems()
+  loadMenuItems()
 })
 </script>
 
@@ -93,16 +59,10 @@ onMounted(() => {
 
     <!-- Navigation -->
     <nav class="flex-1 p-4 overflow-y-auto">
-      <div v-if="loading" class="text-center py-4">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
-      </div>
-      <div v-else-if="error" class="text-center py-4 text-red-500 text-sm">
-        {{ error }}
-      </div>
-      <ul v-else class="space-y-1">
+      <ul class="space-y-1">
         <MenuItem
           v-for="item in menuItems"
-          :key="item.id || item.title"
+          :key="item.id"
           :item="item"
           :level="0"
           :is-collapsed="isCollapsed"
