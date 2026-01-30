@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import {
   ChevronLeft,
   ChevronRight
@@ -8,6 +9,7 @@ import MenuItem from './MenuItem.vue'
 import { getMenu } from '@admin/config/menuInitializer'
 import type { MenuItemConfig } from '@admin/types/menu'
 
+const route = useRoute()
 const isCollapsed = ref(false)
 const menuItems = ref<MenuItemConfig[]>([])
 const expandedItems = ref<Set<string>>(new Set())
@@ -24,16 +26,53 @@ const toggleSubmenu = (itemId: string) => {
   }
 }
 
+// Find and expand parent items for active route
+const expandActiveParents = () => {
+  const currentPath = route.path
+
+  const findAndExpandParents = (items: MenuItemConfig[], parentIds: string[] = []): boolean => {
+    for (const item of items) {
+      const newParentIds = [...parentIds, item.id]
+
+      // Check if this item's path matches current route
+      if (item.path === currentPath) {
+        // Expand all parent items
+        parentIds.forEach(parentId => {
+          expandedItems.value.add(parentId)
+        })
+        return true
+      }
+
+      // Check children recursively
+      if (item.children && item.children.length > 0) {
+        if (findAndExpandParents(item.children, newParentIds)) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  findAndExpandParents(menuItems.value)
+}
+
 const loadMenuItems = () => {
   // Get the admin menu
   const adminMenu = getMenu('admin')
   if (adminMenu && adminMenu.children) {
     menuItems.value = adminMenu.children
+    // Expand parents for initial route
+    expandActiveParents()
   }
 }
 
 onMounted(() => {
   loadMenuItems()
+})
+
+// Watch route changes to keep menu expanded
+watch(() => route.path, () => {
+  expandActiveParents()
 })
 </script>
 

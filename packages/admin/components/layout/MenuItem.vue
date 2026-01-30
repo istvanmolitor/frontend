@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Component } from 'vue'
+import { RouterLink } from 'vue-router'
 import {
-  Home,
   LayoutDashboard,
-  BarChart3,
-  Users,
-  Settings,
   ChevronDown,
   ChevronUp,
   Circle
@@ -106,18 +103,33 @@ const marginClass = computed(() => {
     </div>
 
     <!-- Regular menu item without subitems -->
-    <a
+    <RouterLink
       v-else
-      :href="item.path"
-      :class="[
-        'flex items-center gap-3 rounded-xl text-[--color-muted-foreground] hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10 hover:text-[--color-foreground] transition-all duration-200 hover:shadow-lg hover:scale-[1.02] group relative overflow-hidden',
-        paddingClass,
-        level === 0 ? '' : 'text-sm'
-      ]"
+      :to="item.path || '#'"
+      custom
+      v-slot="{ href, navigate, isActive }"
     >
-      <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-10 transition-opacity"></div>
-      <component :is="iconComponent" :size="iconSize" class="flex-shrink-0 relative z-10 group-hover:scale-110 transition-transform" />
-      <span v-if="!isCollapsed" class="font-medium relative z-10">{{ item.title }}</span>
-    </a>
+      <a
+        :href="href"
+        @click="navigate"
+        :class="[
+          'flex items-center gap-3 rounded-xl transition-all duration-200 hover:shadow-lg hover:scale-[1.02] group relative overflow-hidden',
+          paddingClass,
+          level === 0 ? '' : 'text-sm',
+          isActive
+            ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-[--color-foreground] font-semibold shadow-md'
+            : 'text-[--color-muted-foreground] hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10 hover:text-[--color-foreground]'
+        ]"
+      >
+        <div
+          :class="[
+            'absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 transition-opacity',
+            isActive ? 'opacity-15' : 'opacity-0 group-hover:opacity-10'
+          ]"
+        ></div>
+        <component :is="iconComponent" :size="iconSize" class="flex-shrink-0 relative z-10 group-hover:scale-110 transition-transform" />
+        <span v-if="!isCollapsed" class="font-medium relative z-10">{{ item.title }}</span>
+      </a>
+    </RouterLink>
   </li>
 </template>
