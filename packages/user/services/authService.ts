@@ -1,5 +1,4 @@
 import axios from 'axios'
-import config from '@/config'
 
 const api = axios.create({
   // Use relative URLs to leverage Vite proxy in development
@@ -75,6 +74,11 @@ export interface RegisterCredentials {
   password: string
   password_confirmation: string
   device_name?: string
+}
+
+export interface ChangePasswordCredentials {
+  password: string
+  password_confirmation: string
 }
 
 export interface LoginResponse {
@@ -278,6 +282,18 @@ export const authService = {
   hasAnyPermission(permissions: string[]): boolean {
     const userPermissions = this.getPermissions()
     return permissions.some(permission => userPermissions.includes(permission))
+  },
+
+  /**
+   * Change password for the authenticated user
+   */
+  async changePassword(credentials: ChangePasswordCredentials): Promise<{ message: string }> {
+    try {
+      const response = await api.post<{ message: string }>('/api/auth/change-password', credentials)
+      return response.data
+    } catch (error: any) {
+      throw error.response?.data || { message: 'Failed to change password' }
+    }
   },
 }
 

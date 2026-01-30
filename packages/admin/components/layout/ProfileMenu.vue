@@ -62,7 +62,7 @@ onBeforeUnmount(() => {
     >
       <div
         v-if="isOpen"
-        class="absolute right-0 mt-2 w-56 rounded-lg bg-[--color-card] shadow-xl border border-[--color-border] overflow-hidden z-[100]"
+        class="absolute right-0 mt-2 w-56 rounded-lg bg-[--color-card] shadow-xl border border-[--color-border] overflow-hidden z-[500]"
       >
         <div class="py-1">
           <button

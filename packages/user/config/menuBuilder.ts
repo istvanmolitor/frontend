@@ -1,5 +1,5 @@
 import type { MenuBuilder, MenuItemConfig } from '@menu/index'
-import { Users, UserCircle, Shield, User } from 'lucide-vue-next'
+import { Users, UserCircle, Shield, User, Lock, LogOut } from 'lucide-vue-next'
 
 /**
  * User Menu Builder
@@ -22,10 +22,26 @@ export class UserMenuBuilder implements MenuBuilder {
   private buildProfileMenu(menu: MenuItemConfig): MenuItemConfig {
     const profileItem: MenuItemConfig = {
       id: 'user-profile',
-      title: 'Profil',
+      title: 'Profil adatok',
       path: '/profile',
       icon: User,
       order: 10
+    }
+
+    const changePasswordItem: MenuItemConfig = {
+      id: 'change-password',
+      title: 'Jelszó módosítás',
+      path: '/change-password',
+      icon: Lock,
+      order: 20
+    }
+
+    const logoutItem: MenuItemConfig = {
+      id: 'logout',
+      title: 'Kijelentkezés',
+      path: '/logout',
+      icon: LogOut,
+      order: 30
     }
 
     // Add to menu children
@@ -33,6 +49,8 @@ export class UserMenuBuilder implements MenuBuilder {
       menu.children = []
     }
     menu.children.push(profileItem)
+    menu.children.push(changePasswordItem)
+    menu.children.push(logoutItem)
 
     // Sort children by order
     menu.children.sort((a, b) => {
