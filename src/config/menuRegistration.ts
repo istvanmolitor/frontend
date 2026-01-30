@@ -13,6 +13,9 @@ export function registerMenus(): void {
   // Register user menu builder for the 'admin' menu
   menuRegistry.register('admin', userMenuBuilder)
 
+  // Register user menu builder for the 'profile' menu
+  menuRegistry.register('profile', userMenuBuilder)
+
   // Add more menu builder registrations here as needed
   // Example:
   // menuRegistry.register('admin', otherMenuBuilder)

@@ -4,4 +4,5 @@ export type { MenuItemConfig, PackageMenuConfig, MenuBuilder } from '@menu/index
 
 // Components
 export { default as AdminMenu } from './components/AdminMenu.vue'
+export { default as ProfileMenu } from './components/layout/ProfileMenu.vue'
 

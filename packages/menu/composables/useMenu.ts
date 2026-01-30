@@ -1,5 +1,6 @@
 import { computed, type ComputedRef } from 'vue'
 import { getMenu } from '../config/menuInitializer'
+import { menuUpdateTrigger } from '../config/menuRegistry'
 import type { MenuItemConfig } from '../types/menu'
 
 /**
@@ -10,8 +11,13 @@ import type { MenuItemConfig } from '../types/menu'
 export function useMenu(menuName: string) {
   /**
    * The menu configuration
+   * Watches menuUpdateTrigger to re-evaluate when menus are registered
    */
-  const menu: ComputedRef<MenuItemConfig | undefined> = computed(() => getMenu(menuName))
+  const menu: ComputedRef<MenuItemConfig | undefined> = computed(() => {
+    // Access trigger to create dependency
+    menuUpdateTrigger.value
+    return getMenu(menuName)
+  })
 
   /**
    * Menu items (children of the menu root)

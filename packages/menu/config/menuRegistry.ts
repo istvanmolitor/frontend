@@ -1,4 +1,11 @@
 import type { MenuItemConfig, MenuBuilder } from '../types/menu'
+import { reactive, ref } from 'vue'
+
+/**
+ * Trigger to force menu updates
+ * Increment this to invalidate all menu caches
+ */
+export const menuUpdateTrigger = ref(0)
 
 /**
  * Menu Registry
@@ -6,6 +13,7 @@ import type { MenuItemConfig, MenuBuilder } from '../types/menu'
  */
 class MenuRegistry {
   private builders: Map<string, MenuBuilder[]> = new Map()
+  private menuCache: Map<string, MenuItemConfig> = reactive(new Map())
 
   /**
    * Register a menu builder
@@ -17,6 +25,12 @@ class MenuRegistry {
       this.builders.set(menuName, [])
     }
     this.builders.get(menuName)!.push(builder)
+
+    // Invalidate cache for this menu
+    this.menuCache.delete(menuName)
+
+    // Trigger menu update
+    menuUpdateTrigger.value++
   }
 
   /**
@@ -24,6 +38,7 @@ class MenuRegistry {
    * @param menuName - Name of the menu to unregister
    */
   unregister(menuName: string): boolean {
+    this.menuCache.delete(menuName)
     return this.builders.delete(menuName)
   }
 
@@ -34,7 +49,13 @@ class MenuRegistry {
    * @returns Built menu configuration or undefined if no builders registered
    */
   getMenu(menuName: string): MenuItemConfig | undefined {
+    // Check cache first
+    if (this.menuCache.has(menuName)) {
+      return this.menuCache.get(menuName)
+    }
+
     const builders = this.builders.get(menuName)
+
     if (!builders || builders.length === 0) {
       return undefined
     }
@@ -47,9 +68,12 @@ class MenuRegistry {
     }
 
     // Let each builder build the menu
-    builders.forEach(builder => {
+    builders.forEach((builder) => {
       menu = builder.build(menu, menuName)
     })
+
+    // Cache the built menu
+    this.menuCache.set(menuName, menu)
 
     return menu
   }
@@ -67,6 +91,7 @@ class MenuRegistry {
    */
   clear(): void {
     this.builders.clear()
+    this.menuCache.clear()
   }
 
   /**

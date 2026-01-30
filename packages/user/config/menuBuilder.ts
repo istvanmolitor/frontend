@@ -1,5 +1,5 @@
 import type { MenuBuilder, MenuItemConfig } from '@menu/index'
-import { Users, UserCircle, Shield } from 'lucide-vue-next'
+import { Users, UserCircle, Shield, User } from 'lucide-vue-next'
 
 /**
  * User Menu Builder
@@ -7,6 +7,47 @@ import { Users, UserCircle, Shield } from 'lucide-vue-next'
  */
 export class UserMenuBuilder implements MenuBuilder {
   build(menu: MenuItemConfig, menuName: string): MenuItemConfig {
+    // Handle profile menu
+    if (menuName === 'profile') {
+      return this.buildProfileMenu(menu)
+    }
+
+    // Handle main menu (default)
+    return this.buildMainMenu(menu)
+  }
+
+  /**
+   * Build profile menu items
+   */
+  private buildProfileMenu(menu: MenuItemConfig): MenuItemConfig {
+    const profileItem: MenuItemConfig = {
+      id: 'user-profile',
+      title: 'Profil',
+      path: '/profile',
+      icon: User,
+      order: 10
+    }
+
+    // Add to menu children
+    if (!menu.children) {
+      menu.children = []
+    }
+    menu.children.push(profileItem)
+
+    // Sort children by order
+    menu.children.sort((a, b) => {
+      const orderA = a.order ?? Number.MAX_SAFE_INTEGER
+      const orderB = b.order ?? Number.MAX_SAFE_INTEGER
+      return orderA - orderB
+    })
+
+    return menu
+  }
+
+  /**
+   * Build main menu items
+   */
+  private buildMainMenu(menu: MenuItemConfig): MenuItemConfig {
     // Add user management section to the menu
     const userSection: MenuItemConfig = {
       id: 'user-management',

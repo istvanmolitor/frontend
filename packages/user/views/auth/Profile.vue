@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuth } from '@/composables/useAuth.ts'
+import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
 import Card from '@admin/components/ui/Card.vue'
 import CardContent from '@admin/components/ui/CardContent.vue'
 import CardDescription from '@admin/components/ui/CardDescription.vue'
@@ -32,14 +33,14 @@ const handleLogout = async () => {
 }
 
 const formatDate = (dateString: string | null) => {
-  if (!dateString) return 'Not verified'
-  return new Date(dateString).toLocaleDateString()
+  if (!dateString) return 'Nincs megerősítve'
+  return new Date(dateString).toLocaleDateString('hu-HU')
 }
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 p-4">
-    <div class="max-w-4xl mx-auto py-8">
+  <AdminLayout>
+    <div class="max-w-4xl mx-auto">
       <!-- Loading State -->
       <div v-if="loading" class="text-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
@@ -53,23 +54,26 @@ const formatDate = (dateString: string | null) => {
 
       <!-- User Profile -->
       <div v-else-if="user">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-3xl font-bold tracking-tight">Profil</h2>
+        </div>
+
         <Card class="shadow-xl">
           <CardHeader>
             <div class="flex items-center justify-between">
               <div>
-                <CardTitle class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Profile
+                <CardTitle class="text-2xl font-bold">
+                  Felhasználói adatok
                 </CardTitle>
                 <CardDescription>
-                  Your account information
+                  A fiókod információi
                 </CardDescription>
               </div>
               <Button
                 @click="handleLogout"
                 variant="destructive"
-                class="bg-red-500 hover:bg-red-600"
               >
-                Logout
+                Kijelentkezés
               </Button>
             </div>
           </CardHeader>
@@ -78,7 +82,7 @@ const formatDate = (dateString: string | null) => {
             <!-- User Info -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Name</label>
+                <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Név</label>
                 <p class="text-lg font-semibold text-gray-900 dark:text-white">{{ user.name }}</p>
               </div>
 
@@ -88,7 +92,7 @@ const formatDate = (dateString: string | null) => {
               </div>
 
               <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Email Verified</label>
+                <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Email megerősítve</label>
                 <p class="text-lg">
                   <span
                     :class="[
@@ -98,34 +102,34 @@ const formatDate = (dateString: string | null) => {
                         : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
                     ]"
                   >
-                    {{ user.email_verified ? 'Verified' : 'Not Verified' }}
+                    {{ user.email_verified ? 'Megerősítve' : 'Nincs megerősítve' }}
                   </span>
                 </p>
               </div>
 
               <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Verified At</label>
+                <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Megerősítés időpontja</label>
                 <p class="text-lg text-gray-700 dark:text-gray-300">
                   {{ formatDate(user.email_verified_at) }}
                 </p>
               </div>
 
               <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Member Since</label>
+                <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Regisztráció dátuma</label>
                 <p class="text-lg text-gray-700 dark:text-gray-300">
                   {{ formatDate(user.created_at) }}
                 </p>
               </div>
 
               <div class="space-y-2">
-                <label class="text-sm font-medium text-gray-500 dark:text-gray-400">User ID</label>
+                <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Felhasználó ID</label>
                 <p class="text-lg text-gray-700 dark:text-gray-300">#{{ user.id }}</p>
               </div>
             </div>
 
             <!-- User Groups -->
             <div v-if="user.user_groups && user.user_groups.length > 0" class="space-y-3">
-              <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Groups</label>
+              <label class="text-sm font-medium text-gray-500 dark:text-gray-400">Csoportok</label>
               <div class="flex flex-wrap gap-2">
                 <span
                   v-for="group in user.user_groups"
@@ -133,7 +137,7 @@ const formatDate = (dateString: string | null) => {
                   class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
                 >
                   {{ group.name }}
-                  <span v-if="group.is_default" class="ml-2 text-xs">(Default)</span>
+                  <span v-if="group.is_default" class="ml-2 text-xs">(Alapértelmezett)</span>
                 </span>
               </div>
             </div>
@@ -141,15 +145,15 @@ const formatDate = (dateString: string | null) => {
             <!-- Actions -->
             <div class="flex gap-3 pt-4 border-t">
               <Button variant="outline" @click="router.push('/users')">
-                View All Users
+                Összes felhasználó
               </Button>
               <Button variant="outline" @click="fetchUser">
-                Refresh Profile
+                Frissítés
               </Button>
             </div>
           </CardContent>
         </Card>
       </div>
     </div>
-  </div>
+  </AdminLayout>
 </template>
