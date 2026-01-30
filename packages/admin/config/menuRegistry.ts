@@ -1,101 +1,81 @@
-import type { MenuItemConfig } from '@admin/types/menu'
-import { Home, LayoutDashboard } from 'lucide-vue-next'
+import type { MenuItemConfig, MenuBuilder } from '../types/menu'
 
 /**
- * Central menu registry for the admin panel
- * Allows packages to register their menu items
+ * Menu Registry
+ * Manages registration and retrieval of menu builders
  */
 class MenuRegistry {
-  private menuItems: MenuItemConfig[] = []
+  private builders: Map<string, MenuBuilder[]> = new Map()
 
   /**
-   * Register menu items from a package
-   * @param items Menu items to register
+   * Register a menu builder
+   * @param menuName - Name of the menu
+   * @param builder - Menu builder instance
    */
-  register(items: MenuItemConfig | MenuItemConfig[]): void {
-    const itemsArray = Array.isArray(items) ? items : [items]
-    this.menuItems.push(...itemsArray)
+  register(menuName: string, builder: MenuBuilder): void {
+    if (!this.builders.has(menuName)) {
+      this.builders.set(menuName, [])
+    }
+    this.builders.get(menuName)!.push(builder)
   }
 
   /**
-   * Get all registered menu items, sorted by order
-   * @returns Sorted menu items
+   * Unregister all builders for a menu
+   * @param menuName - Name of the menu to unregister
    */
-  getMenuItems(): MenuItemConfig[] {
-    return this.sortMenuItems([...this.menuItems])
+  unregister(menuName: string): boolean {
+    return this.builders.delete(menuName)
   }
 
   /**
-   * Recursively sort menu items and their children by order
+   * Get a built menu by name
+   * All registered builders for this menu will be called to build the menu
+   * @param menuName - Name of the menu
+   * @returns Built menu configuration or undefined if no builders registered
    */
-  private sortMenuItems(items: MenuItemConfig[]): MenuItemConfig[] {
-    const sorted = items.sort((a, b) => {
-      const orderA = a.order ?? 999
-      const orderB = b.order ?? 999
-      return orderA - orderB
-    })
-
-    // Sort children recursively
-    sorted.forEach(item => {
-      if (item.children && item.children.length > 0) {
-        item.children = this.sortMenuItems(item.children)
-      }
-    })
-
-    return sorted
-  }
-
-  /**
-   * Clear all registered menu items (mainly for testing)
-   */
-  clear(): void {
-    this.menuItems = []
-  }
-
-  /**
-   * Get flattened list of all menu items (including nested)
-   * Useful for permission checking
-   */
-  getFlattenedItems(): MenuItemConfig[] {
-    const flatten = (items: MenuItemConfig[]): MenuItemConfig[] => {
-      const result: MenuItemConfig[] = []
-
-      items.forEach(item => {
-        result.push(item)
-        if (item.children && item.children.length > 0) {
-          result.push(...flatten(item.children))
-        }
-      })
-
-      return result
+  getMenu(menuName: string): MenuItemConfig | undefined {
+    const builders = this.builders.get(menuName)
+    if (!builders || builders.length === 0) {
+      return undefined
     }
 
-    return flatten(this.getMenuItems())
+    // Start with empty menu structure
+    let menu: MenuItemConfig = {
+      id: menuName,
+      title: menuName,
+      children: []
+    }
+
+    // Let each builder build the menu
+    builders.forEach(builder => {
+      menu = builder.build(menu, menuName)
+    })
+
+    return menu
+  }
+
+  /**
+   * Get all menu names
+   * @returns Array of registered menu names
+   */
+  getMenuNames(): string[] {
+    return Array.from(this.builders.keys())
+  }
+
+  /**
+   * Clear all registered builders
+   */
+  clear(): void {
+    this.builders.clear()
+  }
+
+  /**
+   * Get the number of registered menus
+   */
+  get size(): number {
+    return this.builders.size
   }
 }
 
-// Singleton instance
+// Export a singleton instance
 export const menuRegistry = new MenuRegistry()
-
-// Default admin menu items
-const defaultMenuItems: MenuItemConfig[] = [
-  {
-    id: 'home',
-    title: 'Kezdőlap',
-    icon: Home,
-    path: '/',
-    order: 1
-  },
-  {
-    id: 'dashboard',
-    title: 'Dashboard',
-    icon: LayoutDashboard,
-    path: '/dashboard',
-    order: 2
-  }
-]
-
-// Register default menu items
-menuRegistry.register(defaultMenuItems)
-
-export default menuRegistry

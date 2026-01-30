@@ -31,15 +31,28 @@ export interface MenuItemConfig {
 }
 
 /**
- * Menu configuration for a package
+ * Package menu configuration
+ * Used for registering package menus with the menu registry
  */
 export interface PackageMenuConfig {
-  /** Package identifier */
-  packageId: string
+  /** Package name */
+  packageName: string
 
-  /** Menu items from this package */
-  items: MenuItemConfig[]
-
-  /** Package order (for organizing multiple packages) */
-  order?: number
+  /** Menu configuration */
+  menu: MenuItemConfig
 }
+
+/**
+ * Menu Builder Interface
+ * Builders implement this interface to construct menu items dynamically
+ */
+export interface MenuBuilder {
+  /**
+   * Build the menu structure
+   * @param menu - Current menu configuration
+   * @param menuName - Name of the menu being built
+   * @returns Updated menu configuration
+   */
+  build(menu: MenuItemConfig, menuName: string): MenuItemConfig
+}
+

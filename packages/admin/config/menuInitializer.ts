@@ -1,25 +1,46 @@
+import type { MenuItemConfig } from '../types/menu'
 import { menuRegistry } from './menuRegistry'
-import { userMenuConfig } from '@user/config/menu'
 
 /**
- * Initialize admin menu system
- * Registers all package menus
+ * Get a menu by name
+ * @param menuName - Name of the menu to get
+ * @returns Menu configuration or undefined if not found
  */
-export function initializeMenu(): void {
-  // Register user package menu
-  menuRegistry.register(userMenuConfig)
-
-  // Future packages can be registered here:
-  // menuRegistry.register(settingsMenuConfig)
-  // menuRegistry.register(reportsMenuConfig)
-  // etc.
+export function getMenu(menuName: string): MenuItemConfig | undefined {
+  return menuRegistry.getMenu(menuName)
 }
 
 /**
- * Get the current menu items
+ * Get all registered menu names
+ * @returns Array of menu names
  */
-export function getMenuItems() {
-  return menuRegistry.getMenuItems()
+export function getMenuNames(): string[] {
+  return menuRegistry.getMenuNames()
 }
 
-export default initializeMenu
+/**
+ * Find a menu item by ID within a menu
+ * @param menu - Menu to search in
+ * @param id - Menu item ID to search for
+ * @returns Menu item or undefined if not found
+ */
+export function findMenuItemById(menu: MenuItemConfig, id: string): MenuItemConfig | undefined {
+  function search(item: MenuItemConfig): MenuItemConfig | undefined {
+    if (item.id === id) {
+      return item
+    }
+
+    if (item.children) {
+      for (const child of item.children) {
+        const found = search(child)
+        if (found) {
+          return found
+        }
+      }
+    }
+
+    return undefined
+  }
+
+  return search(menu)
+}

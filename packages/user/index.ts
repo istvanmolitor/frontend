@@ -17,4 +17,5 @@ export type { Permission } from './services/permissionService'
 
 // Menu configuration
 export { userMenuConfig, default as defaultUserMenuConfig } from './config/menu'
+export { UserMenuBuilder, userMenuBuilder } from './config/menuBuilder'
 

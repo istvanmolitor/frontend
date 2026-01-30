@@ -5,7 +5,7 @@ import {
   ChevronRight
 } from 'lucide-vue-next'
 import MenuItem from './MenuItem.vue'
-import { initializeMenu, getMenuItems } from '@admin/config/menuInitializer'
+import { getMenu } from '@admin/config/menuInitializer'
 import type { MenuItemConfig } from '@admin/types/menu'
 
 const isCollapsed = ref(false)
@@ -25,11 +25,11 @@ const toggleSubmenu = (itemId: string) => {
 }
 
 const loadMenuItems = () => {
-  // Initialize menu system (registers all package menus)
-  initializeMenu()
-
-  // Get menu items from registry
-  menuItems.value = getMenuItems()
+  // Get the admin menu
+  const adminMenu = getMenu('admin')
+  if (adminMenu && adminMenu.children) {
+    menuItems.value = adminMenu.children
+  }
 }
 
 onMounted(() => {
