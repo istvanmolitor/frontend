@@ -11,7 +11,7 @@ registerMenus()
 
 // Enable debug utilities in development
 if (import.meta.env.DEV) {
-  import('@admin/lib/menuDebug')
+  import('@menu/lib/menuDebug')
 }
 
 const app = createApp(App)

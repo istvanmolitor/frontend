@@ -1,4 +1,4 @@
-import type { MenuBuilder, MenuItemConfig } from '@admin/types/menu'
+import type { MenuBuilder, MenuItemConfig } from '@menu/index'
 import { Users, UserCircle, Shield } from 'lucide-vue-next'
 
 /**

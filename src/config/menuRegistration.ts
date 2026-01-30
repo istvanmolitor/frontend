@@ -2,7 +2,7 @@
  * Menu Registration
  * This file registers all menu builders with the menu registry
  */
-import { menuRegistry } from '@admin/index'
+import { menuRegistry } from '@menu/index'
 import { userMenuBuilder } from '@user/config/menuBuilder'
 
 /**

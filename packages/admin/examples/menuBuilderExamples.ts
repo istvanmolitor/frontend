@@ -4,8 +4,8 @@
  * This file demonstrates how to use the menu builder pattern
  */
 
-import { menuRegistry } from '@admin/index'
-import type { MenuBuilder, MenuItemConfig } from '@admin/index'
+import { menuRegistry } from '@menu/index'
+import type { MenuBuilder, MenuItemConfig } from '@menu/index'
 import { Settings, Home, Package } from 'lucide-vue-next'
 
 /**
@@ -193,7 +193,7 @@ export class ConditionalMenuBuilder implements MenuBuilder {
 /**
  * Example Usage in menuRegistration.ts:
  *
- * import { menuRegistry } from '@admin/index'
+ * import { menuRegistry } from '@menu/index'
  * import { userMenuBuilder } from '@user/config/menuBuilder'
  * import { SettingsMenuBuilder, DashboardMenuBuilder } from './menuBuilders'
  *
@@ -216,7 +216,7 @@ export class ConditionalMenuBuilder implements MenuBuilder {
 /**
  * Example: Getting a menu in a component
  *
- * import { useMenu } from '@admin/index'
+ * import { useMenu } from '@menu/index'
  *
  * const { menuItems } = useMenu('admin')
  *

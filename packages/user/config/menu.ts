@@ -1,5 +1,5 @@
 import { Users, UserCircle, Shield, FolderTree } from 'lucide-vue-next'
-import type { MenuItemConfig } from '@admin/types/menu'
+import type { MenuItemConfig } from '@menu/index'
 
 /**
  * User package menu configuration

@@ -1,4 +1,4 @@
-import { computed, type ComputedRef, ref, type Ref } from 'vue'
+import { computed, type ComputedRef } from 'vue'
 import { getMenu } from '../config/menuInitializer'
 import type { MenuItemConfig } from '../types/menu'
 

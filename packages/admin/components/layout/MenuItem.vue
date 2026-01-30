@@ -8,7 +8,7 @@ import {
   ChevronUp,
   Circle
 } from 'lucide-vue-next'
-import type { MenuItemConfig } from '@admin/types/menu'
+import type { MenuItemConfig } from '@menu/index'
 
 interface Props {
   item: MenuItemConfig

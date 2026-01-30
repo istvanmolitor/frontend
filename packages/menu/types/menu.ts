@@ -55,4 +55,3 @@ export interface MenuBuilder {
    */
   build(menu: MenuItemConfig, menuName: string): MenuItemConfig
 }
-

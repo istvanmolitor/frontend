@@ -8,7 +8,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@admin/*": ["./packages/admin/*"],
-      "@user/*": ["./packages/user/*"]
+      "@user/*": ["./packages/user/*"],
+      "@menu/*": ["./packages/menu/*"]
     }
   }
 }

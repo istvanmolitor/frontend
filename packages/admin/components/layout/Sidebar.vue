@@ -6,8 +6,8 @@ import {
   ChevronRight
 } from 'lucide-vue-next'
 import MenuItem from './MenuItem.vue'
-import { getMenu } from '@admin/config/menuInitializer'
-import type { MenuItemConfig } from '@admin/types/menu'
+import { getMenu } from '@menu/index'
+import type { MenuItemConfig } from '@menu/index'
 
 const route = useRoute()
 const isCollapsed = ref(false)
