@@ -8,18 +8,34 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
+import Checkboxes from '@admin/components/ui/Checkboxes.vue'
 import { useRouter } from 'vue-router'
-import { reactive, ref } from 'vue'
-import { userService } from '../../services/userService.ts'
+import { reactive, ref, onMounted } from 'vue'
+import { userService, type UserGroup, type UserFormData } from '../../services/userService.ts'
 
 const router = useRouter()
 const isSaving = ref(false)
+const isLoading = ref(true)
+const availableUserGroups = ref<UserGroup[]>([])
 
-const form = reactive({
+const form = reactive<UserFormData>({
   name: '',
   email: '',
-  role: 'User'
+  user_groups: []
 })
+
+const fetchUserGroups = async () => {
+  try {
+    isLoading.value = true
+    const { data } = await userService.getCreateData()
+    availableUserGroups.value = data.user_groups
+  } catch (error) {
+    console.error('Hiba a felhasználói csoportok betöltésekor:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
 
 const handleSubmit = async () => {
   try {
@@ -36,6 +52,10 @@ const handleSubmit = async () => {
 const goBack = () => {
   router.push('/users')
 }
+
+onMounted(() => {
+  fetchUserGroups()
+})
 </script>
 
 <template>
@@ -45,7 +65,11 @@ const goBack = () => {
       <Button variant="outline" @click="goBack">Vissza</Button>
     </div>
 
-    <Card class="max-w-2xl mx-auto">
+    <div v-if="isLoading" class="flex justify-center py-8">
+      Betöltés...
+    </div>
+
+    <Card v-else class="max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Felhasználói adatok</CardTitle>
         <CardDescription>Add meg az új felhasználó adatait a létrehozáshoz.</CardDescription>
@@ -59,18 +83,13 @@ const goBack = () => {
           <label for="email" class="text-sm font-medium">Email</label>
           <Input id="email" v-model="form.email" type="email" placeholder="janos@example.com" />
         </div>
-        <div class="space-y-2">
-          <label for="role" class="text-sm font-medium">Szerepkör</label>
-          <select
-            id="role"
-            v-model="form.role"
-            class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <option value="Admin">Admin</option>
-            <option value="User">User</option>
-            <option value="Editor">Editor</option>
-          </select>
-        </div>
+        <Checkboxes
+          v-model="form.user_groups"
+          :items="availableUserGroups"
+          label="Felhasználói csoportok"
+          empty-message="Nincsenek elérhető felhasználói csoportok."
+          id-prefix="group"
+        />
       </CardContent>
       <CardFooter class="flex justify-end gap-2">
         <Button variant="ghost" :disabled="isSaving" @click="goBack">Mégse</Button>

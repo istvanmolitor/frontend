@@ -23,14 +23,28 @@ api.interceptors.request.use(
   }
 )
 
+export interface UserGroup {
+  id: number
+  name: string
+  description?: string | null
+}
+
 export interface User {
   id?: number
   name: string
   email: string
   email_verified_at?: string | null
   email_verified?: boolean
+  user_groups?: UserGroup[]
   created_at?: string
   updated_at?: string
+}
+
+export interface UserFormData {
+  name: string
+  email: string
+  user_groups?: number[]
+  email_verified?: boolean
 }
 
 export interface PaginatedResponse<T> {
@@ -59,10 +73,16 @@ export const userService = {
   getById(id: number | string) {
     return api.get<SingleResponse<User>>(`/api/admin/user/users/${id}`)
   },
-  create(user: User) {
+  getCreateData() {
+    return api.get<{ user_groups: UserGroup[] }>('/api/admin/user/users/create')
+  },
+  getEditData(id: number | string) {
+    return api.get<{ data: User; user_groups: UserGroup[] }>(`/api/admin/user/users/${id}/edit`)
+  },
+  create(user: UserFormData) {
     return api.post<User>('/api/admin/user/users', user)
   },
-  update(id: number | string, user: User) {
+  update(id: number | string, user: UserFormData) {
     return api.put<User>(`/api/admin/user/users/${id}`, user)
   },
   delete(id: number | string) {

@@ -8,28 +8,33 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
+import Checkboxes from '@admin/components/ui/Checkboxes.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
-import { userService, type User } from '../../services/userService.ts'
+import { userService, type UserGroup, type UserFormData } from '../../services/userService.ts'
 
 const router = useRouter()
 const route = useRoute()
 const isSaving = ref(false)
 const isLoading = ref(true)
+const availableUserGroups = ref<UserGroup[]>([])
 
-const form = reactive({
+const form = reactive<UserFormData>({
   name: '',
-  email: ''
+  email: '',
+  user_groups: []
 })
 
 const fetchUser = async () => {
   const id = route.params.id as string
   try {
     isLoading.value = true
-    const { data } = await userService.getById(id)
+    const { data } = await userService.getEditData(id)
     const user = data.data
     form.name = user.name
     form.email = user.email
+    form.user_groups = user.user_groups?.map(g => g.id) || []
+    availableUserGroups.value = data.user_groups
   } catch (error) {
     console.error('Hiba a felhasználó betöltésekor:', error)
     router.push('/users')
@@ -37,6 +42,7 @@ const fetchUser = async () => {
     isLoading.value = false
   }
 }
+
 
 const handleSubmit = async () => {
   const id = route.params.id as string
@@ -85,6 +91,13 @@ onMounted(() => {
           <label for="email" class="text-sm font-medium">Email</label>
           <Input id="email" v-model="form.email" type="email" placeholder="janos@example.com" />
         </div>
+        <Checkboxes
+          v-model="form.user_groups"
+          :items="availableUserGroups"
+          label="Felhasználói csoportok"
+          empty-message="Nincsenek elérhető felhasználói csoportok."
+          id-prefix="group"
+        />
       </CardContent>
       <CardFooter class="flex justify-end gap-2">
         <Button variant="ghost" :disabled="isSaving" @click="goBack">Mégse</Button>
