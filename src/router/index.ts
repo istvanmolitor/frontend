@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import userRoutes from '@user/router'
+import languageRoutes from '@language/router'
 import { authGuard } from './guards'
 
 const router = createRouter({
@@ -9,7 +10,8 @@ const router = createRouter({
       path: '/',
       redirect: '/login'
     },
-    ...userRoutes
+    ...userRoutes,
+    ...languageRoutes
   ]
 })
 

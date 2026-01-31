@@ -4,6 +4,7 @@
  */
 import { menuRegistry } from '@menu/index'
 import { userMenuBuilder } from '@user/config/menuBuilder'
+import { languageMenuBuilder } from '@language/config/menuBuilder'
 
 /**
  * Register all menu builders
@@ -16,9 +17,8 @@ export function registerMenus(): void {
   // Register user menu builder for the 'profile' menu
   menuRegistry.register('profile', userMenuBuilder)
 
-  // Add more menu builder registrations here as needed
-  // Example:
-  // menuRegistry.register('admin', otherMenuBuilder)
+  // Register language menu builder for the 'admin' menu
+  menuRegistry.register('admin', languageMenuBuilder)
 }
 
 export default registerMenus
