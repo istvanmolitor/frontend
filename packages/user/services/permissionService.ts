@@ -33,7 +33,7 @@ export interface UserGroup {
 }
 
 export interface Permission {
-  id?: number
+  id: number
   name: string
   description?: string | null
   user_groups?: UserGroup[]
@@ -44,6 +44,15 @@ export interface Permission {
 export interface PermissionFormData {
   name: string
   description?: string | null
+  user_groups?: number[]
+}
+
+export interface CreateDataResponse {
+  user_groups: UserGroup[]
+}
+
+export interface EditDataResponse extends SingleResponse<Permission> {
+  user_groups: UserGroup[]
 }
 
 export interface PaginatedResponse<T> {
@@ -70,7 +79,10 @@ export const permissionService = {
     return api.get<PaginatedResponse<Permission>>('/api/admin/user/permissions', { params })
   },
   getById(id: number | string) {
-    return api.get<SingleResponse<Permission>>(`/api/admin/user/permissions/${id}`)
+    return api.get<EditDataResponse>(`/api/admin/user/permissions/${id}/edit`)
+  },
+  getCreateData() {
+    return api.get<CreateDataResponse>('/api/admin/user/permissions/create')
   },
   create(permission: PermissionFormData) {
     return api.post<{ data: Permission; message: string }>('/api/admin/user/permissions', permission)

@@ -10,6 +10,8 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
+import Checkboxes from '@admin/components/ui/Checkboxes.vue'
+import FormButtons from '@admin/components/ui/FormButtons.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { userGroupService, type Permission } from '../../services/userGroupService.ts'
@@ -48,18 +50,6 @@ const fetchUserGroup = async () => {
   }
 }
 
-const togglePermission = (permissionId: number) => {
-  const index = form.permissions.indexOf(permissionId)
-  if (index > -1) {
-    form.permissions.splice(index, 1)
-  } else {
-    form.permissions.push(permissionId)
-  }
-}
-
-const isPermissionSelected = (permissionId: number) => {
-  return form.permissions.includes(permissionId)
-}
 
 const handleSubmit = async () => {
   const id = route.params.id as string
@@ -120,33 +110,21 @@ onMounted(() => {
           </label>
         </div>
 
-        <div class="space-y-2">
-          <label class="text-sm font-medium">Jogosultságok</label>
-          <div class="border rounded-md p-4 space-y-2 max-h-64 overflow-y-auto">
-            <div v-if="availablePermissions.length === 0" class="text-sm text-muted-foreground">
-              Nincsenek elérhető jogosultságok.
-            </div>
-            <div v-else v-for="permission in availablePermissions" :key="permission.id" class="flex items-start space-x-2">
-              <Checkbox
-                :id="`perm-${permission.id}`"
-                :checked="isPermissionSelected(permission.id)"
-                @update:checked="togglePermission(permission.id)"
-              />
-              <label :for="`perm-${permission.id}`" class="text-sm cursor-pointer">
-                <div class="font-medium">{{ permission.name }}</div>
-                <div v-if="permission.description" class="text-xs text-muted-foreground">
-                  {{ permission.description }}
-                </div>
-              </label>
-            </div>
-          </div>
-        </div>
+        <Checkboxes
+          v-model="form.permissions"
+          :items="availablePermissions"
+          label="Jogosultságok"
+          empty-message="Nincsenek elérhető jogosultságok."
+          id-prefix="perm"
+        />
       </CardContent>
-      <CardFooter class="flex justify-end gap-2">
-        <Button variant="ghost" :disabled="isSaving" @click="goBack">Mégse</Button>
-        <Button :disabled="isSaving || !form.name" @click="handleSubmit">
-          {{ isSaving ? 'Mentés...' : 'Mentés' }}
-        </Button>
+      <CardFooter>
+        <FormButtons
+          :is-saving="isSaving"
+          :save-disabled="!form.name"
+          @save="handleSubmit"
+          @cancel="goBack"
+        />
       </CardFooter>
     </Card>
   </AdminLayout>

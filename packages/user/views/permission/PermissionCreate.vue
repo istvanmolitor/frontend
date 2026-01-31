@@ -9,24 +9,42 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
+import Checkboxes from '@admin/components/ui/Checkboxes.vue'
+import FormButtons from '@admin/components/ui/FormButtons.vue'
 import { useRouter } from 'vue-router'
-import { reactive, ref } from 'vue'
-import { permissionService } from '../../services/permissionService.ts'
+import { reactive, ref, onMounted } from 'vue'
+import { permissionService, type UserGroup } from '../../services/permissionService.ts'
 
 const router = useRouter()
 const isSaving = ref(false)
+const isLoading = ref(true)
+const availableUserGroups = ref<UserGroup[]>([])
 
 const form = reactive({
   name: '',
-  description: ''
+  description: '',
+  user_groups: [] as number[]
 })
+
+const fetchCreateData = async () => {
+  try {
+    isLoading.value = true
+    const { data } = await permissionService.getCreateData()
+    availableUserGroups.value = data.user_groups
+  } catch (error) {
+    console.error('Hiba az adatok betöltésekor:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
 
 const handleSubmit = async () => {
   try {
     isSaving.value = true
     await permissionService.create({
       name: form.name,
-      description: form.description || null
+      description: form.description || null,
+      user_groups: form.user_groups
     })
     router.push('/permissions')
   } catch (error) {
@@ -39,6 +57,10 @@ const handleSubmit = async () => {
 const goBack = () => {
   router.push('/permissions')
 }
+
+onMounted(() => {
+  fetchCreateData()
+})
 </script>
 
 <template>
@@ -48,7 +70,11 @@ const goBack = () => {
       <Button variant="outline" @click="goBack">Vissza</Button>
     </div>
 
-    <Card class="max-w-2xl mx-auto">
+    <div v-if="isLoading" class="flex justify-center py-8">
+      Betöltés...
+    </div>
+
+    <Card v-else class="max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Jogosultság adatai</CardTitle>
         <CardDescription>Add meg az új jogosultság adatait.</CardDescription>
@@ -62,12 +88,22 @@ const goBack = () => {
           <label for="description" class="text-sm font-medium">Leírás</label>
           <Textarea id="description" v-model="form.description" placeholder="Opcionális leírás..." :rows="3" />
         </div>
+
+        <Checkboxes
+          v-model="form.user_groups"
+          :items="availableUserGroups"
+          label="Felhasználói csoportok"
+          empty-message="Nincsenek elérhető felhasználói csoportok."
+          id-prefix="group"
+        />
       </CardContent>
-      <CardFooter class="flex justify-end gap-2">
-        <Button variant="ghost" :disabled="isSaving" @click="goBack">Mégse</Button>
-        <Button :disabled="isSaving || !form.name" @click="handleSubmit">
-          {{ isSaving ? 'Mentés...' : 'Mentés' }}
-        </Button>
+      <CardFooter>
+        <FormButtons
+          :is-saving="isSaving"
+          :save-disabled="!form.name"
+          @save="handleSubmit"
+          @cancel="goBack"
+        />
       </CardFooter>
     </Card>
   </AdminLayout>

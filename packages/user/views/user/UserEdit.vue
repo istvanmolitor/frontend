@@ -9,6 +9,7 @@ import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import Checkboxes from '@admin/components/ui/Checkboxes.vue'
+import FormButtons from '@admin/components/ui/FormButtons.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { userService, type UserGroup, type UserFormData } from '../../services/userService.ts'
@@ -99,11 +100,12 @@ onMounted(() => {
           id-prefix="group"
         />
       </CardContent>
-      <CardFooter class="flex justify-end gap-2">
-        <Button variant="ghost" :disabled="isSaving" @click="goBack">Mégse</Button>
-        <Button :disabled="isSaving" @click="handleSubmit">
-          {{ isSaving ? 'Mentés...' : 'Mentés' }}
-        </Button>
+      <CardFooter>
+        <FormButtons
+          :is-saving="isSaving"
+          @save="handleSubmit"
+          @cancel="goBack"
+        />
       </CardFooter>
     </Card>
   </AdminLayout>

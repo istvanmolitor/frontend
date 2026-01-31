@@ -9,29 +9,36 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
+import Checkboxes from '@admin/components/ui/Checkboxes.vue'
+import FormButtons from '@admin/components/ui/FormButtons.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
-import { permissionService } from '../../services/permissionService.ts'
+import { permissionService, type UserGroup } from '../../services/permissionService.ts'
 
 const router = useRouter()
 const route = useRoute()
 const isSaving = ref(false)
 const isLoading = ref(true)
+const availableUserGroups = ref<UserGroup[]>([])
 
 const form = reactive({
   name: '',
-  description: ''
+  description: '',
+  user_groups: [] as number[]
 })
 
 const fetchPermission = async () => {
   const id = route.params.id as string
   try {
     isLoading.value = true
-    const response = await permissionService.getById(id)
-    const permission = response.data.data
+    const { data } = await permissionService.getById(id)
+    const permission = data.data
 
     form.name = permission.name
     form.description = permission.description || ''
+    form.user_groups = permission.user_groups?.map(g => g.id) || []
+
+    availableUserGroups.value = data.user_groups || []
   } catch (error) {
     console.error('Hiba a jogosultság betöltésekor:', error)
     router.push('/permissions')
@@ -46,7 +53,8 @@ const handleSubmit = async () => {
     isSaving.value = true
     await permissionService.update(id, {
       name: form.name,
-      description: form.description || null
+      description: form.description || null,
+      user_groups: form.user_groups
     })
     router.push('/permissions')
   } catch (error) {
@@ -90,12 +98,22 @@ onMounted(() => {
           <label for="description" class="text-sm font-medium">Leírás</label>
           <Textarea id="description" v-model="form.description" placeholder="Opcionális leírás..." :rows="3" />
         </div>
+
+        <Checkboxes
+          v-model="form.user_groups"
+          :items="availableUserGroups"
+          label="Felhasználói csoportok"
+          empty-message="Nincsenek elérhető felhasználói csoportok."
+          id-prefix="group"
+        />
       </CardContent>
-      <CardFooter class="flex justify-end gap-2">
-        <Button variant="ghost" :disabled="isSaving" @click="goBack">Mégse</Button>
-        <Button :disabled="isSaving || !form.name" @click="handleSubmit">
-          {{ isSaving ? 'Mentés...' : 'Mentés' }}
-        </Button>
+      <CardFooter>
+        <FormButtons
+          :is-saving="isSaving"
+          :save-disabled="!form.name"
+          @save="handleSubmit"
+          @cancel="goBack"
+        />
       </CardFooter>
     </Card>
   </AdminLayout>
