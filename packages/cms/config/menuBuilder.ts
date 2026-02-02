@@ -1,5 +1,5 @@
 import type { MenuBuilder, MenuItemConfig } from '@menu/index'
-import { FileText, Layout } from 'lucide-vue-next'
+import { FileText, Layout, Layers } from 'lucide-vue-next'
 
 /**
  * CMS Menu Builder
@@ -24,6 +24,13 @@ export class CmsMenuBuilder implements MenuBuilder {
           path: '/cms/pages',
           icon: FileText,
           order: 10
+        },
+        {
+          id: 'cms-regions',
+          title: 'Régiók',
+          path: '/cms/regions',
+          icon: Layers,
+          order: 20
         }
       ]
     }

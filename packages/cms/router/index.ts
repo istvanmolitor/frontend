@@ -19,6 +19,24 @@ const cmsRoutes: RouteRecordRaw[] = [
     component: () => import('../views/page/PageEdit.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/cms/regions',
+    name: 'cms-regions',
+    component: () => import('../views/content-region/ContentRegionIndex.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/cms/regions/create',
+    name: 'cms-region-create',
+    component: () => import('../views/content-region/ContentRegionCreate.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/cms/regions/:id/edit',
+    name: 'cms-region-edit',
+    component: () => import('../views/content-region/ContentRegionEdit.vue'),
+    meta: { requiresAuth: true }
+  },
 ]
 
 export default cmsRoutes
