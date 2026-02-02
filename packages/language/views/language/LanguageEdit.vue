@@ -10,6 +10,7 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import FormButtons from '@admin/components/ui/FormButtons.vue'
+import TranslationRepeater from '../../components/TranslationRepeater.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { languageService, type Language, type LanguageFormData } from '../../services/languageService'
@@ -19,6 +20,7 @@ const route = useRoute()
 const isSaving = ref(false)
 const isLoading = ref(true)
 const availableLanguages = ref<Language[]>([])
+const selectedLanguages = ref<Language[]>([])
 
 const form = reactive<LanguageFormData>({
   code: '',
@@ -36,11 +38,14 @@ const fetchData = async () => {
     form.code = data.data.code
     form.enabled = data.data.enabled
 
-    // Inicializáljuk a fordításokat az adatokkal
-    availableLanguages.value.forEach(lang => {
-      if (lang.id) {
-        form.translations[lang.id] = {
-          name: data.data.translations?.[lang.id]?.name || ''
+    // Inicializáljuk a fordításokat az adatokkal és állítsuk be a kiválasztott nyelveket
+    Object.keys(data.data.translations || {}).forEach(langIdStr => {
+      const langId = parseInt(langIdStr)
+      const lang = availableLanguages.value.find(l => l.id === langId)
+      if (lang) {
+        selectedLanguages.value.push(lang)
+        form.translations[langId] = {
+          name: data.data.translations?.[langId]?.name || ''
         }
       }
     })
@@ -49,6 +54,19 @@ const fetchData = async () => {
   } finally {
     isLoading.value = false
   }
+}
+
+const handleAddLanguage = (id: number) => {
+  const lang = availableLanguages.value.find(l => l.id === id)
+  if (lang && !selectedLanguages.value.find(l => l.id === id)) {
+    selectedLanguages.value.push(lang)
+    form.translations[id] = { name: '' }
+  }
+}
+
+const handleRemoveLanguage = (id: number) => {
+  selectedLanguages.value = selectedLanguages.value.filter(l => l.id !== id)
+  delete form.translations[id]
 }
 
 const handleSubmit = async () => {
@@ -102,11 +120,20 @@ onMounted(() => {
         </div>
 
         <div class="space-y-4 pt-4 border-t">
-          <h3 class="text-lg font-medium">Fordítások</h3>
-          <div v-for="lang in availableLanguages" :key="lang.id" class="space-y-2">
-            <label :for="'lang-' + lang.id" class="text-sm font-medium">Név ({{ lang.code }})</label>
-            <Input :id="'lang-' + lang.id" v-model="form.translations[lang.id!].name" />
-          </div>
+          <h3 class="text-lg font-medium mb-4">Fordítások</h3>
+          <TranslationRepeater
+            :languages="selectedLanguages"
+            :available-languages="availableLanguages"
+            @add="handleAddLanguage"
+            @remove="handleRemoveLanguage"
+          >
+            <template #default="{ language }">
+              <div class="space-y-2">
+                <label :for="'lang-' + language.id" class="text-sm font-medium">Név</label>
+                <Input :id="'lang-' + language.id" v-model="form.translations[language.id!].name" />
+              </div>
+            </template>
+          </TranslationRepeater>
         </div>
       </CardContent>
       <CardFooter>

@@ -36,6 +36,7 @@ export interface Language {
 export interface LanguageFormData {
   code: string
   enabled: boolean
+  native_name?: string
   translations: Record<number, { name: string }>
 }
 

@@ -10,6 +10,7 @@ import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import Checkbox from '@admin/components/ui/Checkbox.vue'
 import FormButtons from '@admin/components/ui/FormButtons.vue'
+import TranslationRepeater from '../../components/TranslationRepeater.vue'
 import { useRouter } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { languageService, type Language, type LanguageFormData } from '../../services/languageService'
@@ -18,10 +19,12 @@ const router = useRouter()
 const isSaving = ref(false)
 const isLoading = ref(true)
 const availableLanguages = ref<Language[]>([])
+const selectedLanguages = ref<Language[]>([])
 
 const form = reactive<LanguageFormData>({
   code: '',
   enabled: true,
+  native_name: '',
   translations: {}
 })
 
@@ -31,17 +34,31 @@ const fetchAvailableLanguages = async () => {
     const { data } = await languageService.getCreateData()
     availableLanguages.value = data.availableLanguages
 
-    // Inicializáljuk a fordításokat
-    availableLanguages.value.forEach(lang => {
-      if (lang.id) {
-        form.translations[lang.id] = { name: '' }
+    // Kezdetben csak az alapértelmezett (vagy első) nyelvet adjuk hozzá, ha van
+    if (availableLanguages.value.length > 0) {
+      const firstLang = availableLanguages.value[0]
+      if (firstLang.id) {
+        handleAddLanguage(firstLang.id)
       }
-    })
+    }
   } catch (error) {
     console.error('Hiba a nyelvek betöltésekor:', error)
   } finally {
     isLoading.value = false
   }
+}
+
+const handleAddLanguage = (id: number) => {
+  const lang = availableLanguages.value.find(l => l.id === id)
+  if (lang && !selectedLanguages.value.find(l => l.id === id)) {
+    selectedLanguages.value.push(lang)
+    form.translations[id] = { name: '' }
+  }
+}
+
+const handleRemoveLanguage = (id: number) => {
+  selectedLanguages.value = selectedLanguages.value.filter(l => l.id !== id)
+  delete form.translations[id]
 }
 
 const handleSubmit = async () => {
@@ -87,18 +104,32 @@ onMounted(() => {
             <label for="code" class="text-sm font-medium">Kód (pl. hu, en)</label>
             <Input id="code" v-model="form.code" placeholder="hu" />
           </div>
-          <div class="flex items-center space-x-2 pt-8">
-            <Checkbox id="enabled" :checked="form.enabled" @update:checked="(v) => form.enabled = v" />
-            <label for="enabled" class="text-sm font-medium">Engedélyezve</label>
+          <div class="space-y-2">
+            <label for="native_name" class="text-sm font-medium">Név (saját nyelven)</label>
+            <Input id="native_name" v-model="form.native_name" placeholder="Magyar" />
           </div>
         </div>
 
+        <div class="flex items-center space-x-2">
+          <Checkbox id="enabled" :checked="form.enabled" @update:checked="(v) => form.enabled = v" />
+          <label for="enabled" class="text-sm font-medium">Engedélyezve</label>
+        </div>
+
         <div class="space-y-4 pt-4 border-t">
-          <h3 class="text-lg font-medium">Fordítások</h3>
-          <div v-for="lang in availableLanguages" :key="lang.id" class="space-y-2">
-            <label :for="'lang-' + lang.id" class="text-sm font-medium">Név ({{ lang.code }})</label>
-            <Input :id="'lang-' + lang.id" v-model="form.translations[lang.id!].name" :placeholder="lang.name" />
-          </div>
+          <h3 class="text-lg font-medium mb-4">Fordítások</h3>
+          <TranslationRepeater
+            :languages="selectedLanguages"
+            :available-languages="availableLanguages"
+            @add="handleAddLanguage"
+            @remove="handleRemoveLanguage"
+          >
+            <template #default="{ language }">
+              <div class="space-y-2">
+                <label :for="'lang-' + language.id" class="text-sm font-medium">Név</label>
+                <Input :id="'lang-' + language.id" v-model="form.translations[language.id!].name" :placeholder="language.name" />
+              </div>
+            </template>
+          </TranslationRepeater>
         </div>
       </CardContent>
       <CardFooter>
