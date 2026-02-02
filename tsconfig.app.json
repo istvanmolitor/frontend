@@ -9,7 +9,9 @@
       "@/*": ["./src/*"],
       "@admin/*": ["./packages/admin/*"],
       "@user/*": ["./packages/user/*"],
-      "@menu/*": ["./packages/menu/*"]
+      "@menu/*": ["./packages/menu/*"],
+      "@language/*": ["./packages/language/*"],
+      "@cms/*": ["./packages/cms/*"]
     }
   }
 }

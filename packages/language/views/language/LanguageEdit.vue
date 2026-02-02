@@ -86,6 +86,13 @@ const goBack = () => {
   router.push('/languages')
 }
 
+const getTranslation = (id: number) => {
+  if (!form.translations[id]) {
+    form.translations[id] = { name: '' }
+  }
+  return form.translations[id]
+}
+
 onMounted(() => {
   fetchData()
 })
@@ -128,9 +135,9 @@ onMounted(() => {
             @remove="handleRemoveLanguage"
           >
             <template #default="{ language }">
-              <div class="space-y-2">
+              <div class="space-y-2" v-if="language.id">
                 <label :for="'lang-' + language.id" class="text-sm font-medium">Név</label>
-                <Input :id="'lang-' + language.id" v-model="form.translations[language.id!].name" />
+                <Input :id="'lang-' + language.id" v-model="getTranslation(language.id).name" />
               </div>
             </template>
           </TranslationRepeater>

@@ -37,7 +37,7 @@ const fetchAvailableLanguages = async () => {
     // Kezdetben csak az alapértelmezett (vagy első) nyelvet adjuk hozzá, ha van
     if (availableLanguages.value.length > 0) {
       const firstLang = availableLanguages.value[0]
-      if (firstLang.id) {
+      if (firstLang && firstLang.id) {
         handleAddLanguage(firstLang.id)
       }
     }
@@ -75,6 +75,13 @@ const handleSubmit = async () => {
 
 const goBack = () => {
   router.push('/languages')
+}
+
+const getTranslation = (id: number) => {
+  if (!form.translations[id]) {
+    form.translations[id] = { name: '' }
+  }
+  return form.translations[id]
 }
 
 onMounted(() => {
@@ -124,9 +131,9 @@ onMounted(() => {
             @remove="handleRemoveLanguage"
           >
             <template #default="{ language }">
-              <div class="space-y-2">
+              <div class="space-y-2" v-if="language.id">
                 <label :for="'lang-' + language.id" class="text-sm font-medium">Név</label>
-                <Input :id="'lang-' + language.id" v-model="form.translations[language.id!].name" :placeholder="language.name" />
+                <Input :id="'lang-' + language.id" v-model="getTranslation(language.id).name" :placeholder="language.name" />
               </div>
             </template>
           </TranslationRepeater>

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import userRoutes from '@user/router'
-import languageRoutes from '@language/router'
+import { router as userRoutes } from '@user/index'
+import languageRoutes from '@language/router/index'
+import cmsRoutes from '@cms/router/index'
 import { authGuard } from './guards'
 
 const router = createRouter({
@@ -11,7 +12,8 @@ const router = createRouter({
       redirect: '/login'
     },
     ...userRoutes,
-    ...languageRoutes
+    ...languageRoutes,
+    ...cmsRoutes
   ]
 })
 
