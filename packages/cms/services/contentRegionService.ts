@@ -24,14 +24,16 @@ api.interceptors.request.use(
 )
 
 export interface ContentElement {
-  id: number
+  id?: number
   type: string
-  content: any
+  content: string
+  sort: number
+  is_visible: boolean
 }
 
 export interface Content {
-  id: number
-  elements: ContentElement[]
+  id?: number
+  content_elements: ContentElement[]
 }
 
 export interface ContentRegion {
@@ -42,6 +44,7 @@ export interface ContentRegion {
 
 export interface ContentRegionFormData {
   name: string
+  content_elements?: ContentElement[]
 }
 
 export interface SingleResponse<T> {

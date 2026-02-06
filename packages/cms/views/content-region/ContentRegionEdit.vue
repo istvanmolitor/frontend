@@ -12,6 +12,7 @@ import FormButtons from '@admin/components/ui/FormButtons.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
 import { contentRegionService, type ContentRegionFormData } from '../../services/contentRegionService.ts'
+import EditContent from '../../components/EditContent.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -20,7 +21,8 @@ const isLoading = ref(true)
 const regionId = route.params.id as string
 
 const form = reactive<ContentRegionFormData>({
-  name: ''
+  name: '',
+  content_elements: []
 })
 
 const fetchRegion = async () => {
@@ -28,6 +30,7 @@ const fetchRegion = async () => {
     isLoading.value = true
     const { data } = await contentRegionService.getById(regionId)
     form.name = data.data.name
+    form.content_elements = data.data.content?.content_elements || []
   } catch (error) {
     console.error('Hiba a régió betöltésekor:', error)
   } finally {
@@ -82,6 +85,8 @@ onMounted(() => {
           <label for="name" class="text-sm font-medium">Név</label>
           <Input id="name" v-model="form.name" placeholder="Régió neve" />
         </div>
+        <hr class="my-6" />
+        <EditContent v-model="form.content_elements" />
       </CardContent>
       <CardFooter>
         <FormButtons

@@ -11,7 +11,8 @@ import CardTitle from '@admin/components/ui/CardTitle.vue'
 import FormButtons from '@admin/components/ui/FormButtons.vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reactive, ref, onMounted } from 'vue'
-import { pageService, type PageFormData } from '../../services/pageService.ts'
+import { pageService, type PageFormData, type ContentElement } from '../../services/pageService.ts'
+import EditContent from '../../components/EditContent.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -21,7 +22,8 @@ const pageId = route.params.id as string
 
 const form = reactive<PageFormData>({
   title: '',
-  slug: ''
+  slug: '',
+  content_elements: []
 })
 
 const fetchPage = async () => {
@@ -30,6 +32,7 @@ const fetchPage = async () => {
     const { data } = await pageService.getById(pageId)
     form.title = data.data.title
     form.slug = data.data.slug
+    form.content_elements = data.data.content?.content_elements || []
   } catch (error) {
     console.error('Hiba az oldal betöltésekor:', error)
   } finally {
@@ -83,6 +86,8 @@ onMounted(() => {
           <label for="slug" class="text-sm font-medium">Slug</label>
           <Input id="slug" v-model="form.slug" placeholder="oldal-cime" />
         </div>
+        <hr class="my-6" />
+        <EditContent v-model="form.content_elements" />
       </CardContent>
       <CardFooter>
         <FormButtons
