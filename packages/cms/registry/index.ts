@@ -1,6 +1,7 @@
 import { contentElementTypeRegistry } from './ContentElementTypeRegistry'
 import DefaultElementEditor from '../components/elements/DefaultElementEditor.vue'
 import HeadingElementEditor from '../components/elements/HeadingElementEditor.vue'
+import VideoElementEditor from '../components/elements/VideoElementEditor.vue'
 import { Type, Heading1, Image, Video, Code, Quote, List } from 'lucide-vue-next'
 
 contentElementTypeRegistry.register({
@@ -27,7 +28,7 @@ contentElementTypeRegistry.register({
 contentElementTypeRegistry.register({
   type: 'video',
   label: 'Videó',
-  component: DefaultElementEditor,
+  component: VideoElementEditor,
   icon: Video
 })
 
