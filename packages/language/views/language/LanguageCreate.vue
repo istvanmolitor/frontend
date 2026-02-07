@@ -100,7 +100,7 @@ onMounted(() => {
       Betöltés...
     </div>
 
-    <Card v-else class="max-w-2xl mx-auto">
+    <Card v-else>
       <CardHeader>
         <CardTitle>Nyelv adatai</CardTitle>
         <CardDescription>Add meg az új nyelv adatait a létrehozáshoz.</CardDescription>

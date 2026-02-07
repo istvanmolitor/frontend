@@ -66,7 +66,7 @@ const getFieldError = (field: string): string | null => {
 
 <template>
   <AdminLayout>
-    <div class="max-w-2xl mx-auto">
+    <div>
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-3xl font-bold tracking-tight">Jelszó módosítás</h2>
       </div>

@@ -19,6 +19,7 @@ const route = useRoute()
 const isSaving = ref(false)
 const isLoading = ref(true)
 const pageId = route.params.id as string
+const errors = ref<any>({})
 
 const form = reactive<PageFormData>({
   title: '',
@@ -43,9 +44,13 @@ const fetchPage = async () => {
 const handleSubmit = async () => {
   try {
     isSaving.value = true
+    errors.value = {}
     await pageService.update(pageId, form)
     router.push('/cms/pages')
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response?.status === 422) {
+      errors.value = error.response.data.errors
+    }
     console.error('Hiba az oldal frissítésekor:', error)
   } finally {
     isSaving.value = false
@@ -72,7 +77,7 @@ onMounted(() => {
       Betöltés...
     </div>
 
-    <Card v-else class="max-w-2xl mx-auto">
+    <Card v-else>
       <CardHeader>
         <CardTitle>Oldal adatai</CardTitle>
         <CardDescription>Módosítsd az oldal adatait.</CardDescription>
@@ -88,6 +93,9 @@ onMounted(() => {
         </div>
         <hr class="my-6" />
         <EditContent v-model="form.content_elements" />
+        <div v-if="errors['content.content_elements']" class="text-sm font-medium text-destructive mt-2">
+          Legalább egy tartalmi elemet meg kell adni.
+        </div>
       </CardContent>
       <CardFooter>
         <FormButtons

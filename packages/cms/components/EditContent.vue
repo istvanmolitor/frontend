@@ -9,7 +9,7 @@ import { contentElementTypeRegistry } from '../registry'
 interface ContentElement {
   id?: number
   type: string
-  content: string
+  content: any
   sort: number
   is_visible: boolean
 }
@@ -45,7 +45,7 @@ const addElementWithType = (type: string) => {
 
   elements.value.push({
     type,
-    content: '',
+    content: {},
     sort: nextSort,
     is_visible: true
   })

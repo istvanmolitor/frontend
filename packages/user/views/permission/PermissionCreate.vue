@@ -74,7 +74,7 @@ onMounted(() => {
       Betöltés...
     </div>
 
-    <Card v-else class="max-w-2xl mx-auto">
+    <Card v-else>
       <CardHeader>
         <CardTitle>Jogosultság adatai</CardTitle>
         <CardDescription>Add meg az új jogosultság adatait.</CardDescription>

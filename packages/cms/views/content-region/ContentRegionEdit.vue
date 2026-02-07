@@ -19,6 +19,7 @@ const route = useRoute()
 const isSaving = ref(false)
 const isLoading = ref(true)
 const regionId = route.params.id as string
+const errors = ref<any>({})
 
 const form = reactive<ContentRegionFormData>({
   name: '',
@@ -41,6 +42,7 @@ const fetchRegion = async () => {
 const handleSubmit = async () => {
   try {
     isSaving.value = true
+    errors.value = {}
     // ContentRegion update is not implemented in backend repository/controller yet,
     // but usually we would call update here.
     // Given the current backend implementation only has create/delete,
@@ -48,7 +50,10 @@ const handleSubmit = async () => {
     // I should probably add update to backend too.
     await contentRegionService.update(regionId, form)
     router.push('/cms/regions')
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response?.status === 422) {
+      errors.value = error.response.data.errors
+    }
     console.error('Hiba a régió frissítésekor:', error)
   } finally {
     isSaving.value = false
@@ -75,7 +80,7 @@ onMounted(() => {
       Betöltés...
     </div>
 
-    <Card v-else class="max-w-2xl mx-auto">
+    <Card v-else>
       <CardHeader>
         <CardTitle>Régió adatai</CardTitle>
         <CardDescription>Módosítsd a tartalom régió adatait.</CardDescription>
@@ -87,6 +92,9 @@ onMounted(() => {
         </div>
         <hr class="my-6" />
         <EditContent v-model="form.content_elements" />
+        <div v-if="errors['content.content_elements']" class="text-sm font-medium text-destructive mt-2">
+          Legalább egy tartalmi elemet meg kell adni.
+        </div>
       </CardContent>
       <CardFooter>
         <FormButtons

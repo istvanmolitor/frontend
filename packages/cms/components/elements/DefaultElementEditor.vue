@@ -2,20 +2,24 @@
 import { ref, watch } from 'vue'
 
 interface Props {
-  modelValue: string
+  modelValue: string | Record<string, any>
 }
 
 const props = defineProps<Props>()
 const emit = defineEmits(['update:modelValue'])
 
-const content = ref(props.modelValue)
+const content = ref(typeof props.modelValue === 'object' ? props.modelValue.content || '' : props.modelValue)
 
 watch(() => props.modelValue, (newVal) => {
-  content.value = newVal
+  content.value = typeof newVal === 'object' ? newVal.content || '' : newVal
 })
 
 watch(content, (newVal) => {
-  emit('update:modelValue', newVal)
+  if (typeof props.modelValue === 'object') {
+    emit('update:modelValue', { ...props.modelValue, content: newVal })
+  } else {
+    emit('update:modelValue', newVal)
+  }
 })
 </script>
 
