@@ -6,6 +6,7 @@ import { menuRegistry } from '@menu/index'
 import { userMenuBuilder } from '@user/index'
 import { languageMenuBuilder } from '@language/config/menuBuilder'
 import { cmsMenuBuilder } from '@cms/config/menuBuilder'
+import { mediaMenuBuilder } from '@media/index'
 
 /**
  * Register all menu builders
@@ -23,6 +24,9 @@ export function registerMenus(): void {
 
   // Register CMS menu builder for the 'admin' menu
   menuRegistry.register('admin', cmsMenuBuilder)
+
+  // Register media menu builder for the 'admin' menu
+  menuRegistry.register('admin', mediaMenuBuilder)
 }
 
 export default registerMenus

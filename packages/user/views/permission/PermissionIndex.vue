@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
 import Button from '@admin/components/ui/Button.vue'
+import Icon from '@admin/components/ui/Icon.vue'
 import DataTable, { type Column, type PaginationMeta } from '@admin/components/DataTable.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
@@ -74,7 +75,10 @@ const editPermission = (id: number) => {
       @fetch="fetchPermissions"
     >
       <template #actions>
-        <Button @click="router.push('/permissions/create')">Új jogosultság</Button>
+        <Button @click="router.push('/permissions/create')">
+          <Icon name="plus" :size="16" class="mr-2" />
+          Új jogosultság
+        </Button>
       </template>
 
       <template #cell-description="{ row }">

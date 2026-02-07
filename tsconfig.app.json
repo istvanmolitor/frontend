@@ -11,7 +11,8 @@
       "@user/*": ["./packages/user/*"],
       "@menu/*": ["./packages/menu/*"],
       "@language/*": ["./packages/language/*"],
-      "@cms/*": ["./packages/cms/*"]
+      "@cms/*": ["./packages/cms/*"],
+      "@media/*": ["./packages/media/*"]
     }
   }
 }

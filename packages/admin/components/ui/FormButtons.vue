@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Button from './Button.vue'
+import Icon from './Icon.vue'
 
 interface Props {
   isSaving?: boolean
@@ -29,15 +30,17 @@ defineEmits<{
       :disabled="isSaving"
       @click="$emit('cancel')"
     >
+      <Icon name="x" :size="16" class="mr-2" />
       {{ cancelLabel }}
     </Button>
     <Button
-      type="button"
+      type="submit"
       variant="default"
-      class="min-w-[100px] shadow-md"
+      class="min-w-[100px] shadow-md btn btn-primary"
       :disabled="isSaving || saveDisabled"
       @click="$emit('save')"
     >
+      <Icon :name="isSaving ? 'loader' : 'save'" :size="16" :class="['mr-2', isSaving ? 'animate-spin' : '']" />
       {{ isSaving ? `${saveLabel}...` : saveLabel }}
     </Button>
   </div>

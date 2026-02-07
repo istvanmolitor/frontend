@@ -9,6 +9,7 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import Button from '@admin/components/ui/Button.vue'
+import Icon from '@admin/components/ui/Icon.vue'
 import Input from '@admin/components/ui/Input.vue'
 import Label from '@admin/components/ui/Label.vue'
 import { Lock, Eye, EyeOff } from 'lucide-vue-next'
@@ -161,10 +162,16 @@ const getFieldError = (field: string): string | null => {
               <Button
                 type="submit"
                 :disabled="loading"
-                class="min-w-30"
+                class="min-w-30 btn btn-primary"
               >
-                <span v-if="loading">Mentés...</span>
-                <span v-else>Jelszó módosítása</span>
+                <span v-if="loading" class="flex items-center">
+                  <Icon name="loader" :size="16" class="mr-2 animate-spin" />
+                  Mentés...
+                </span>
+                <span v-else class="flex items-center">
+                  <Icon name="key" :size="16" class="mr-2" />
+                  Jelszó módosítása
+                </span>
               </Button>
               <Button
                 type="button"
@@ -172,6 +179,7 @@ const getFieldError = (field: string): string | null => {
                 @click="router.push('/profile')"
                 :disabled="loading"
               >
+                <Icon name="x" :size="16" class="mr-2" />
                 Mégse
               </Button>
             </div>

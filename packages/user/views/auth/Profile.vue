@@ -9,6 +9,7 @@ import CardDescription from '@admin/components/ui/CardDescription.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import Button from '@admin/components/ui/Button.vue'
+import Icon from '@admin/components/ui/Icon.vue'
 
 const router = useRouter()
 const { user, loading, logout, fetchUser } = useAuth()
@@ -73,6 +74,7 @@ const formatDate = (dateString: string | null) => {
                 @click="handleLogout"
                 variant="destructive"
               >
+                <Icon name="logout" :size="16" class="mr-2" />
                 Kijelentkezés
               </Button>
             </div>
@@ -145,9 +147,11 @@ const formatDate = (dateString: string | null) => {
             <!-- Actions -->
             <div class="flex gap-3 pt-4 border-t">
               <Button variant="outline" @click="router.push('/users')">
+                <Icon name="users" :size="16" class="mr-2" />
                 Összes felhasználó
               </Button>
               <Button variant="outline" @click="fetchUser">
+                <Icon name="refresh" :size="16" class="mr-2" />
                 Frissítés
               </Button>
             </div>

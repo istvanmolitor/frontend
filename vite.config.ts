@@ -27,7 +27,8 @@ export default defineConfig({
       '@user': fileURLToPath(new URL('./packages/user', import.meta.url)),
       '@language': fileURLToPath(new URL('./packages/language', import.meta.url)),
       '@menu': fileURLToPath(new URL('./packages/menu', import.meta.url)),
-      '@cms': fileURLToPath(new URL('./packages/cms', import.meta.url))
+      '@cms': fileURLToPath(new URL('./packages/cms', import.meta.url)),
+      '@media': fileURLToPath(new URL('./packages/media', import.meta.url))
     },
   },
 })

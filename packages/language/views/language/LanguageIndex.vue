@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
 import Button from '@admin/components/ui/Button.vue'
+import Icon from '@admin/components/ui/Icon.vue'
 import DataTable, { type Column, type PaginationMeta } from '@admin/components/DataTable.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
@@ -74,7 +75,10 @@ const editLanguage = (id: number) => {
       @fetch="fetchLanguages"
     >
       <template #actions>
-        <Button @click="router.push('/languages/create')">Új nyelv</Button>
+        <Button @click="router.push('/languages/create')">
+          <Icon name="plus" :size="16" class="mr-2" />
+          Új nyelv
+        </Button>
       </template>
 
       <template #cell-enabled="{ row }">

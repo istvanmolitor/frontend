@@ -9,6 +9,7 @@ import CardFooter from '@admin/components/ui/CardFooter.vue'
 import CardHeader from '@admin/components/ui/CardHeader.vue'
 import CardTitle from '@admin/components/ui/CardTitle.vue'
 import Button from '@admin/components/ui/Button.vue'
+import Icon from '@admin/components/ui/Icon.vue'
 import Input from '@admin/components/ui/Input.vue'
 
 const router = useRouter()
@@ -172,7 +173,7 @@ const getFieldError = (field: string): string | null => {
           <Button
             type="submit"
             :disabled="loading"
-            class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+            class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl btn btn-primary"
           >
             <span v-if="loading" class="flex items-center justify-center">
               <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -181,7 +182,10 @@ const getFieldError = (field: string): string | null => {
               </svg>
               Creating account...
             </span>
-            <span v-else>Create Account</span>
+            <span v-else class="flex items-center justify-center">
+              <Icon name="pen-line" :size="16" class="mr-2" />
+              Create Account
+            </span>
           </Button>
 
           <p class="text-center text-sm text-gray-600 dark:text-gray-400">

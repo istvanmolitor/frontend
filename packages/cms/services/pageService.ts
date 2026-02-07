@@ -70,10 +70,24 @@ export const pageService = {
     return api.get<SingleResponse<Page>>(`/api/cms/slug/${slug}`)
   },
   create(page: PageFormData) {
-    return api.post<SingleResponse<Page>>('/api/cms/pages', page)
+    const { content_elements, ...rest } = page
+    const payload = {
+      ...rest,
+      content: {
+        content_elements
+      }
+    }
+    return api.post<SingleResponse<Page>>('/api/cms/pages', payload)
   },
   update(id: number | string, page: PageFormData) {
-    return api.put<SingleResponse<Page>>(`/api/cms/pages/${id}`, page)
+    const { content_elements, ...rest } = page
+    const payload = {
+      ...rest,
+      content: {
+        content_elements
+      }
+    }
+    return api.put<SingleResponse<Page>>(`/api/cms/pages/${id}`, payload)
   },
   delete(id: number | string) {
     return api.delete(`/api/cms/pages/${id}`)

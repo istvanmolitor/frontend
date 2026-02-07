@@ -158,27 +158,29 @@ const moveDown = (index: number) => {
     </div>
 
     <!-- Type select modal -->
-    <div v-if="showTypeModal" class="fixed inset-0 z-50 flex items-center justify-center">
-      <div class="absolute inset-0 bg-black/50" @click="closeTypeModal"></div>
-      <div class="relative bg-background rounded-lg shadow-lg w-full max-w-lg p-6">
-        <h4 class="text-base font-medium mb-4">Válaszd ki az elem típusát</h4>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <Button
-            v-for="type in availableTypes"
-            :key="type.type"
-            type="button"
-            variant="outline"
-            class="justify-start"
-            @click="addElementWithType(type.type)"
-          >
-            <component :is="type.icon" class="w-4 h-4 mr-2" />
-            {{ type.label }}
-          </Button>
-        </div>
-        <div class="mt-6 text-right">
-          <Button type="button" variant="ghost" @click="closeTypeModal">Mégse</Button>
+    <Teleport to="body">
+      <div v-if="showTypeModal" class="fixed inset-0 z-[100] flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/50" @click="closeTypeModal"></div>
+        <div class="relative bg-background rounded-lg shadow-lg w-full max-w-lg p-6">
+          <h4 class="text-base font-medium mb-4">Válaszd ki az elem típusát</h4>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <Button
+              v-for="type in availableTypes"
+              :key="type.type"
+              type="button"
+              variant="outline"
+              class="justify-start"
+              @click="addElementWithType(type.type)"
+            >
+              <component :is="type.icon" class="w-4 h-4 mr-2" />
+              {{ type.label }}
+            </Button>
+          </div>
+          <div class="mt-6 text-right">
+            <Button type="button" variant="ghost" @click="closeTypeModal">Mégse</Button>
+          </div>
         </div>
       </div>
-    </div>
+    </Teleport>
   </div>
 </template>

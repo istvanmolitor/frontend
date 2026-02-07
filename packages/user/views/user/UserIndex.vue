@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
 import Button from '@admin/components/ui/Button.vue'
+import Icon from '@admin/components/ui/Icon.vue'
 import DataTable, { type Column, type PaginationMeta } from '@admin/components/DataTable.vue'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
@@ -67,7 +68,10 @@ const editUser = (id: number) => {
       @fetch="fetchUsers"
     >
       <template #actions>
-        <Button @click="router.push('/users/create')">Új felhasználó</Button>
+        <Button @click="router.push('/users/create')">
+          <Icon name="plus" :size="16" class="mr-2" />
+          Új felhasználó
+        </Button>
       </template>
       <template #cell-email_verified="{ row }">
         <span v-if="row.email_verified" class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded">

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/components/layout/DashboardLayout.vue'
 import Button from '@admin/components/ui/Button.vue'
+import Icon from '@admin/components/ui/Icon.vue'
 import DataTable, { type Column } from '@admin/components/DataTable.vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
@@ -52,7 +53,10 @@ onMounted(() => {
   <AdminLayout>
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-3xl font-bold tracking-tight">Oldalak</h2>
-      <Button @click="router.push('/cms/pages/create')">Új oldal</Button>
+      <Button @click="router.push('/cms/pages/create')">
+        <Icon name="plus" :size="16" class="mr-2" />
+        Új oldal
+      </Button>
     </div>
 
     <DataTable

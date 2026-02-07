@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { router as userRoutes } from '@user/index'
 import languageRoutes from '@language/router/index'
 import cmsRoutes from '@cms/router/index'
+import { mediaRoutes } from '@media/index'
 import { authGuard } from './guards'
 
 const router = createRouter({
@@ -13,7 +14,8 @@ const router = createRouter({
     },
     ...userRoutes,
     ...languageRoutes,
-    ...cmsRoutes
+    ...cmsRoutes,
+    ...mediaRoutes
   ]
 })
 
