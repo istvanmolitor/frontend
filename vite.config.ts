@@ -16,6 +16,7 @@ export default defineConfig({
       '@admin': path.resolve(__dirname, './src/packages/vue-admin'),
       '@menu': path.resolve(__dirname, './src/packages/vue-menu'),
       '@user': path.resolve(__dirname, './src/packages/vue-user'),
+      '@language': path.resolve(__dirname, './src/packages/vue-language'),
     },
   },
 })
