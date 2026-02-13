@@ -8,9 +8,9 @@ import './style.css'
 import App from './App.vue'
 
 // Register default menus
-menuRegistry.register('admin', new AdminMenuBuilder())
-menuRegistry.register('admin', new UserMenuBuilder())
-menuRegistry.register('profile', new UserMenuBuilder())
+menuRegistry.register(new AdminMenuBuilder())
+menuRegistry.register(new UserMenuBuilder())
+// UserMenuBuilder has already been registered, and it's shared across menus now
 
 
 const router = createRouter({
