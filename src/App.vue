@@ -5,9 +5,7 @@ import '@admin/style.css'
 </script>
 
 <template>
-  <DashboardLayout>
-    <HelloWorld msg="Vite + Vue + vue-admin" />
-  </DashboardLayout>
+  <router-view />
 </template>
 
 <style>

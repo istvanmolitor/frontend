@@ -6,6 +6,7 @@ import { UserMenuBuilder } from '@user/config/menuBuilder'
 import userRoutes from '@user/router/index'
 import './style.css'
 import App from './App.vue'
+import {authGuard} from "@user/router/guards.ts";
 
 // Register default menus
 menuRegistry.register(new AdminMenuBuilder())
@@ -16,9 +17,10 @@ menuRegistry.register(new UserMenuBuilder())
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/', component: { template: '<div>Dashboard Content</div>' } },
+    { path: '/', redirect: '/dashboard' },
     ...userRoutes
   ]
 })
+router.beforeEach(authGuard)
 
 createApp(App).use(router).mount('#app')
