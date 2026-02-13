@@ -3,26 +3,28 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { menuRegistry } from '@menu/index'
 import { AdminMenuBuilder } from '@admin/config/adminMenuBuilder'
 import { UserMenuBuilder } from '@user/config/menuBuilder'
-import { LanguageMenuBuilder } from '@/packages/vue-language/config/menuBuilder'
+import { LanguageMenuBuilder } from '@language/config/menuBuilder'
+import { MediaMenuBuilder } from '@media/config/menuBuilder'
 import userRoutes from '@user/router/index'
+import languageRoutes from '@language/router'
+import mediaRoutes from '@media/router'
 import './style.css'
 import App from './App.vue'
 import {authGuard} from "@user/router/guards.ts";
-import languageRoutes from "@/packages/vue-language/router";
 
 // Register default menus
 menuRegistry.register(new AdminMenuBuilder())
 menuRegistry.register(new UserMenuBuilder())
 menuRegistry.register(new LanguageMenuBuilder())
-// UserMenuBuilder has already been registered, and it's shared across menus now
-
+menuRegistry.register(new MediaMenuBuilder())
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', redirect: '/dashboard' },
     ...userRoutes,
-    ...languageRoutes
+    ...languageRoutes,
+    ...mediaRoutes
   ]
 })
 router.beforeEach(authGuard)

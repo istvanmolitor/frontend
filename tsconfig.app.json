@@ -17,7 +17,9 @@
       "@config": ["./config/index.ts"],
       "@admin/*": ["./src/packages/vue-admin/*"],
       "@menu/*": ["./src/packages/vue-menu/*"],
-      "@user/*": ["./src/packages/vue-user/*"]
+      "@user/*": ["./src/packages/vue-user/*"],
+      "@language/*": ["./src/packages/vue-language/*"],
+      "@media/*": ["./src/packages/vue-media/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
