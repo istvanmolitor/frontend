@@ -18,6 +18,7 @@ export default defineConfig({
       '@user': path.resolve(__dirname, './src/packages/vue-user'),
       '@language': path.resolve(__dirname, './src/packages/vue-language'),
       '@media': path.resolve(__dirname, './src/packages/vue-media'),
+      '@cms': path.resolve(__dirname, './src/packages/vue-cms'),
     },
   },
 })

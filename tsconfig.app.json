@@ -19,7 +19,8 @@
       "@menu/*": ["./src/packages/vue-menu/*"],
       "@user/*": ["./src/packages/vue-user/*"],
       "@language/*": ["./src/packages/vue-language/*"],
-      "@media/*": ["./src/packages/vue-media/*"]
+      "@media/*": ["./src/packages/vue-media/*"],
+      "@cms/*": ["./src/packages/vue-cms/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
