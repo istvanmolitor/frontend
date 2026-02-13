@@ -12,8 +12,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      '@config': path.resolve(__dirname, './config'),
       '@admin': path.resolve(__dirname, './src/packages/vue-admin'),
       '@menu': path.resolve(__dirname, './src/packages/vue-menu'),
+      '@user': path.resolve(__dirname, './src/packages/vue-user'),
     },
   },
 })
