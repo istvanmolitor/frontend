@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import { menuRegistry } from '@menu/index'
-import { AdminMenuBuilder } from '@admin/config/adminMenuBuilder'
+import { menuRegistry, AdminMenuBuilder, SettingsMenuBuilder, adminRoutes } from '@admin/index'
 import { UserMenuBuilder } from '@user/config/menuBuilder'
 import { LanguageMenuBuilder } from '@language/config/menuBuilder'
 import { MediaMenuBuilder } from '@media/config/menuBuilder'
@@ -18,6 +17,7 @@ import rssWatcherRoutes from "@rss-watcher/router";
 
 // Register default menus
 menuRegistry.register(new AdminMenuBuilder())
+menuRegistry.register(new SettingsMenuBuilder())
 menuRegistry.register(new UserMenuBuilder())
 menuRegistry.register(new LanguageMenuBuilder())
 menuRegistry.register(new MediaMenuBuilder())
@@ -28,6 +28,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', redirect: '/dashboard' },
+    ...adminRoutes,
     ...userRoutes,
     ...languageRoutes,
     ...mediaRoutes,
