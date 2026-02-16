@@ -6,6 +6,7 @@ import { LanguageMenuBuilder } from '@language/config/menuBuilder'
 import { MediaMenuBuilder } from '@media/config/menuBuilder'
 import { CmsMenuBuilder } from '@cms/config/menuBuilder'
 import { RssWatcherMenuBuilder } from '@rss-watcher/config/menuBuilder'
+import { ArticleScraperMenuBuilder } from './packages/vue-article-scraper/config/menuBuilder'
 import userRoutes from '@user/router/index'
 import languageRoutes from '@language/router'
 import mediaRoutes from '@media/router'
@@ -14,6 +15,7 @@ import './style.css'
 import App from './App.vue'
 import {authGuard} from "@user/router/guards.ts";
 import rssWatcherRoutes from "@rss-watcher/router";
+import articleScraperRoutes from "./packages/vue-article-scraper/router";
 
 // Register default menus
 menuRegistry.register(new AdminMenuBuilder())
@@ -23,6 +25,7 @@ menuRegistry.register(new LanguageMenuBuilder())
 menuRegistry.register(new MediaMenuBuilder())
 menuRegistry.register(new CmsMenuBuilder())
 menuRegistry.register(new RssWatcherMenuBuilder())
+menuRegistry.register(new ArticleScraperMenuBuilder())
 
 const router = createRouter({
   history: createWebHistory(),
@@ -33,7 +36,8 @@ const router = createRouter({
     ...languageRoutes,
     ...mediaRoutes,
     ...cmsRoutes,
-    ...rssWatcherRoutes
+    ...rssWatcherRoutes,
+    ...articleScraperRoutes
   ]
 })
 router.beforeEach(authGuard)

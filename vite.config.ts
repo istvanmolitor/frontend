@@ -9,6 +9,14 @@ export default defineConfig({
     vue(),
     tailwindcss(),
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      }
+    }
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -20,6 +28,7 @@ export default defineConfig({
       '@media': path.resolve(__dirname, './src/packages/vue-media'),
       '@cms': path.resolve(__dirname, './src/packages/vue-cms'),
       '@rss-watcher': path.resolve(__dirname, './src/packages/vue-rss-watcher'),
+      '@article-scraper': path.resolve(__dirname, './src/packages/vue-article-scraper'),
     },
   },
 })
