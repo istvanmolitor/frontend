@@ -5,7 +5,12 @@ export default {
         "./src/packages/**/*.{vue,js,ts,jsx,tsx}",
     ],
     theme: {
-        extend: {},
+        extend: {
+            colors: {
+                'primary-emphasis': 'hsl(var(--color-primary-emphasis))',
+                'primary-emphasis-foreground': 'hsl(var(--color-primary-emphasis-foreground))',
+            }
+        },
     },
     plugins: [],
 }
