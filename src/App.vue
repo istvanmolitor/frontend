@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import DashboardLayout from '@admin/components/layout/DashboardLayout.vue'
-import HelloWorld from './components/HelloWorld.vue'
+import { DevErrorModal, useDevError } from '@admin/index'
 import '@admin/style.css'
+
+const { devErrorState, closeDevError } = useDevError()
 </script>
 
 <template>
   <router-view />
+  <DevErrorModal
+    :open="devErrorState.isOpen"
+    :error="devErrorState.error"
+    @update:open="closeDevError"
+  />
 </template>
 
 <style>
