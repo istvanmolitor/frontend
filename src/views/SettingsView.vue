@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import DataCard from '@/packages/vue-admin/ui/DataCard.vue'
+import AdminLayout from '@admin/layout/AdminLayout.vue'
+import DataCard from '@admin/ui/DataCard.vue'
 
 const profile = ref({
   name: 'John Doe',
@@ -24,6 +25,7 @@ const saveSettings = () => {
 </script>
 
 <template>
+  <AdminLayout>
   <div class="space-y-6 max-w-2xl">
     <!-- Profile -->
     <DataCard title="Profil adatok" description="Alap fiókadatok kezelése">
@@ -136,6 +138,7 @@ const saveSettings = () => {
       </button>
     </div>
   </div>
+  </AdminLayout>
 </template>
 
 

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Users, ShoppingCart, TrendingUp, DollarSign, Eye } from 'lucide-vue-next'
-import StatsCard from '@/packages/vue-admin/ui/StatsCard.vue'
-import DataCard from '@/packages/vue-admin/ui/DataCard.vue'
-import StatusBadge from '@/packages/vue-admin/ui/StatusBadge.vue'
+import AdminLayout from '@admin/layout/AdminLayout.vue'
+import StatsCard from '@admin/ui/StatsCard.vue'
+import DataCard from '@admin/ui/DataCard.vue'
+import StatusBadge from '@admin/ui/StatusBadge.vue'
 import { RouterLink } from 'vue-router'
 
 const stats = [
@@ -29,7 +30,8 @@ const topProducts = [
 </script>
 
 <template>
-  <div class="space-y-6">
+  <AdminLayout>
+    <div class="space-y-6">
     <!-- Stats grid -->
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       <StatsCard
@@ -108,5 +110,6 @@ const topProducts = [
       </div>
     </DataCard>
   </div>
+  </AdminLayout>
 </template>
 

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Search, Filter, Download } from 'lucide-vue-next'
-import DataCard from '@/packages/vue-admin/ui/DataCard.vue'
-import StatusBadge from '@/packages/vue-admin/ui/StatusBadge.vue'
+import AdminLayout from '@admin/layout/AdminLayout.vue'
+import DataCard from '@admin/ui/DataCard.vue'
+import StatusBadge from '@admin/ui/StatusBadge.vue'
 
 const search = ref('')
 const statusFilter = ref('all')
@@ -31,6 +32,7 @@ const applyFilter = () => {
 </script>
 
 <template>
+  <AdminLayout>
   <div class="space-y-6">
     <!-- Toolbar -->
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -102,5 +104,6 @@ const applyFilter = () => {
       </div>
     </DataCard>
   </div>
+  </AdminLayout>
 </template>
 

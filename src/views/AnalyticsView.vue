@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { TrendingUp, Users, ShoppingCart, Eye } from 'lucide-vue-next'
-import DataCard from '@/packages/vue-admin/ui/DataCard.vue'
-import StatsCard from '@/packages/vue-admin/ui/StatsCard.vue'
+import AdminLayout from '@admin/layout/AdminLayout.vue'
+import DataCard from '@admin/ui/DataCard.vue'
+import StatsCard from '@admin/ui/StatsCard.vue'
 
 const stats = [
   { title: 'Oldalmegtekintések', value: '89 214', description: 'Elmúlt 30 nap', icon: Eye, trend: 12.3, color: 'blue' as const },
@@ -32,6 +33,7 @@ const topPages = [
 </script>
 
 <template>
+  <AdminLayout>
   <div class="space-y-6">
     <!-- Stats -->
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -98,5 +100,6 @@ const topPages = [
       </table>
     </DataCard>
   </div>
+  </AdminLayout>
 </template>
 
