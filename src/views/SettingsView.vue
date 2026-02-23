@@ -25,7 +25,7 @@ const saveSettings = () => {
 </script>
 
 <template>
-  <AdminLayout>
+  <AdminLayout page-title="Beállítások">
   <div class="space-y-6 max-w-2xl">
     <!-- Profile -->
     <DataCard title="Profil adatok" description="Alap fiókadatok kezelése">

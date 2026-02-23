@@ -33,7 +33,7 @@ const topPages = [
 </script>
 
 <template>
-  <AdminLayout>
+  <AdminLayout page-title="Analitika">
   <div class="space-y-6">
     <!-- Stats -->
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">

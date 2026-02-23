@@ -26,7 +26,7 @@ const filterPosts = () => {
 </script>
 
 <template>
-  <AdminLayout>
+  <AdminLayout page-title="Tartalom">
   <div class="space-y-6">
     <!-- Toolbar -->
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
