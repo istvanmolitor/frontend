@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { Users, ShoppingCart, TrendingUp, DollarSign, Eye } from 'lucide-vue-next'
 import AdminLayout from '@admin/layout/AdminLayout.vue'
 import StatsCard from '@admin/ui/StatsCard.vue'
 import DataCard from '@admin/ui/DataCard.vue'
 import StatusBadge from '@admin/ui/StatusBadge.vue'
+import Icon from '@admin/ui/Icon.vue'
 import { RouterLink } from 'vue-router'
 
 const stats = [
-  { title: 'Összes bevétel', value: '4 231 890 Ft', description: 'Január–Február összesítve', icon: DollarSign, trend: 12.5, color: 'green' as const },
-  { title: 'Felhasználók', value: '2 847', description: '128 új a héten', icon: Users, trend: 8.2, color: 'blue' as const },
-  { title: 'Rendelések', value: '1 429', description: 'ebből 34 függőben', icon: ShoppingCart, trend: -3.1, color: 'orange' as const },
-  { title: 'Oldal látogatás', value: '89 214', description: 'Átl. 2 614/nap', icon: TrendingUp, trend: 5.7, color: 'purple' as const },
+  { title: 'Összes bevétel', value: '4 231 890 Ft', description: 'Január–Február összesítve', icon: 'DollarSign', trend: 12.5, color: 'green' as const },
+  { title: 'Felhasználók', value: '2 847', description: '128 új a héten', icon: 'Users', trend: 8.2, color: 'blue' as const },
+  { title: 'Rendelések', value: '1 429', description: 'ebből 34 függőben', icon: 'ShoppingCart', trend: -3.1, color: 'orange' as const },
+  { title: 'Oldal látogatás', value: '89 214', description: 'Átl. 2 614/nap', icon: 'TrendingUp', trend: 5.7, color: 'purple' as const },
 ]
 
 const recentOrders = [
@@ -96,15 +96,15 @@ const topProducts = [
     <DataCard title="Gyors műveletek">
       <div class="flex flex-wrap gap-3">
         <RouterLink to="/users" class="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">
-          <Users class="h-4 w-4" />
+          <Icon name="Users" class="h-4 w-4" />
           Új felhasználó
         </RouterLink>
         <RouterLink to="/orders" class="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">
-          <ShoppingCart class="h-4 w-4" />
+          <Icon name="ShoppingCart" class="h-4 w-4" />
           Rendelések kezelése
         </RouterLink>
         <RouterLink to="/analytics" class="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">
-          <Eye class="h-4 w-4" />
+          <Icon name="Eye" class="h-4 w-4" />
           Riport megtekintése
         </RouterLink>
       </div>

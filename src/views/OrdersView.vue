@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Search, Filter, Download } from 'lucide-vue-next'
 import AdminLayout from '@admin/layout/AdminLayout.vue'
 import DataCard from '@admin/ui/DataCard.vue'
 import StatusBadge from '@admin/ui/StatusBadge.vue'
+import Icon from '@admin/ui/Icon.vue'
 
 const search = ref('')
 const statusFilter = ref('all')
@@ -38,7 +38,7 @@ const applyFilter = () => {
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div class="flex flex-1 flex-col gap-2 sm:flex-row sm:items-center">
         <div class="relative max-w-xs flex-1">
-          <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Icon name="Search" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             v-model="search"
             @input="applyFilter"
@@ -48,7 +48,7 @@ const applyFilter = () => {
           />
         </div>
         <div class="relative">
-          <Filter class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Icon name="Filter" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <select
             v-model="statusFilter"
             @change="applyFilter"
@@ -63,7 +63,7 @@ const applyFilter = () => {
         </div>
       </div>
       <button class="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">
-        <Download class="h-4 w-4" />
+        <Icon name="Download" class="h-4 w-4" />
         Export
       </button>
     </div>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Search, Plus, Edit2, Trash2 } from 'lucide-vue-next'
 import AdminLayout from '@admin/layout/AdminLayout.vue'
 import DataCard from '@admin/ui/DataCard.vue'
 import StatusBadge from '@admin/ui/StatusBadge.vue'
+import Icon from '@admin/ui/Icon.vue'
 
 const search = ref('')
 
@@ -31,7 +31,7 @@ const filterPosts = () => {
     <!-- Toolbar -->
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div class="relative max-w-sm flex-1">
-        <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Icon name="Search" class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input
           v-model="search"
           @input="filterPosts"
@@ -41,7 +41,7 @@ const filterPosts = () => {
         />
       </div>
       <button class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity">
-        <Plus class="h-4 w-4" />
+        <Icon name="Plus" class="h-4 w-4" />
         Új bejegyzés
       </button>
     </div>
@@ -75,10 +75,10 @@ const filterPosts = () => {
               <td class="px-6 py-4 text-right">
                 <div class="flex items-center justify-end gap-2">
                   <button class="rounded p-1.5 hover:bg-muted transition-colors text-muted-foreground hover:text-foreground">
-                    <Edit2 class="h-4 w-4" />
+                    <Icon name="Edit2" class="h-4 w-4" />
                   </button>
                   <button class="rounded p-1.5 hover:bg-destructive/10 transition-colors text-muted-foreground hover:text-destructive">
-                    <Trash2 class="h-4 w-4" />
+                    <Icon name="Trash2" class="h-4 w-4" />
                   </button>
                 </div>
               </td>

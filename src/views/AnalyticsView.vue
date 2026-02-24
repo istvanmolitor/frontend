@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { TrendingUp, Users, ShoppingCart, Eye } from 'lucide-vue-next'
 import AdminLayout from '@admin/layout/AdminLayout.vue'
 import DataCard from '@admin/ui/DataCard.vue'
 import StatsCard from '@admin/ui/StatsCard.vue'
 
 const stats = [
-  { title: 'Oldalmegtekintések', value: '89 214', description: 'Elmúlt 30 nap', icon: Eye, trend: 12.3, color: 'blue' as const },
-  { title: 'Egyedi látogatók', value: '24 571', description: 'Elmúlt 30 nap', icon: Users, trend: 8.1, color: 'green' as const },
-  { title: 'Konverziók', value: '3.42%', description: 'Átlagos arány', icon: TrendingUp, trend: -1.2, color: 'orange' as const },
-  { title: 'Bevétel/látogató', value: '2 150 Ft', description: 'Átlagos érték', icon: ShoppingCart, trend: 5.6, color: 'purple' as const },
+  { title: 'Oldalmegtekintések', value: '89 214', description: 'Elmúlt 30 nap', icon: 'Eye', trend: 12.3, color: 'blue' as const },
+  { title: 'Egyedi látogatók', value: '24 571', description: 'Elmúlt 30 nap', icon: 'Users', trend: 8.1, color: 'green' as const },
+  { title: 'Konverziók', value: '3.42%', description: 'Átlagos arány', icon: 'TrendingUp', trend: -1.2, color: 'orange' as const },
+  { title: 'Bevétel/látogató', value: '2 150 Ft', description: 'Átlagos érték', icon: 'ShoppingCart', trend: 5.6, color: 'purple' as const },
 ]
 
 const months = ['Jan', 'Feb', 'Már', 'Ápr', 'Máj', 'Jún', 'Júl', 'Aug', 'Sze', 'Okt', 'Nov', 'Dec']
