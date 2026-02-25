@@ -18,7 +18,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vue-router': ['vue-router'],
-          'reka-ui': ['reka-ui'],
           'lucide-vue': ['lucide-vue-next'],
           'vendor': ['vue', 'tailwindcss'],
         },
