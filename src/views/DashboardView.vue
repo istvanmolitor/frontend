@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/layout/AdminLayout.vue'
-import StatsCard from '@admin/ui/StatsCard.vue'
-import DataCard from '@admin/ui/DataCard.vue'
-import StatusBadge from '@admin/ui/StatusBadge.vue'
-import Icon from '@admin/ui/Icon.vue'
+import StatsCard from '@admin/components/ui/StatsCard.vue'
+import DataCard from '@admin/components/ui/DataCard.vue'
+import StatusBadge from '@admin/components/ui/StatusBadge.vue'
+import Icon from '@admin/components/ui/Icon.vue'
 import { RouterLink } from 'vue-router'
 
 const stats = [

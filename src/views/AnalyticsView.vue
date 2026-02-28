@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AdminLayout from '@admin/layout/AdminLayout.vue'
-import DataCard from '@admin/ui/DataCard.vue'
-import StatsCard from '@admin/ui/StatsCard.vue'
+import DataCard from '@admin/components/ui/DataCard.vue'
+import StatsCard from '@admin/components/ui/StatsCard.vue'
 
 const stats = [
   { title: 'Oldalmegtekintések', value: '89 214', description: 'Elmúlt 30 nap', icon: 'Eye', trend: 12.3, color: 'blue' as const },

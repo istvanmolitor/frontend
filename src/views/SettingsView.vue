@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import AdminLayout from '@admin/layout/AdminLayout.vue'
-import DataCard from '@admin/ui/DataCard.vue'
+import DataCard from '@admin/components/ui/DataCard.vue'
 
 const profile = ref({
   name: 'John Doe',
