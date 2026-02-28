@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import AdminLayout from '@admin/layout/AdminLayout.vue'
+import AdminLayout from '@admin/components/layout/AdminLayout.vue'
 import DataCard from '@admin/components/ui/DataCard.vue'
 import StatusBadge from '@admin/components/ui/StatusBadge.vue'
 import Icon from '@admin/components/ui/Icon.vue'
