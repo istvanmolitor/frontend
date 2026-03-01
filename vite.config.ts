@@ -14,6 +14,7 @@ export default defineConfig({
       '@language': path.resolve(__dirname, './src/packages/vue-language'),
       '@media': path.resolve(__dirname, './src/packages/vue-media'),
       '@cms': path.resolve(__dirname, './src/packages/vue-cms'),
+      '@rss-watcher': path.resolve(__dirname, './src/packages/vue-rss-watcher'),
     },
   },
   build: {
